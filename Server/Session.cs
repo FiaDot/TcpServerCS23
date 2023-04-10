@@ -12,6 +12,9 @@ namespace Server
 		int _disconnected = 0;
 
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
+		Queue<byte[]> _sendQueue = new Queue<byte[]>();
+		bool _pending = false;
+		object _lock = new object();
 
         public void Start(Socket socket)
 		{
@@ -30,11 +33,18 @@ namespace Server
         public void Send(byte[] sendBuff)
 		{
             // _socket.Send(sendBuff);
-			// 잦은 호출과 인자 재사용이 포인트
+            // 잦은 호출과 인자 재사용이 포인트
 
-			// 멀티스레드에서는 인자 공유됨으로 오류 발생
-            _sendArgs.SetBuffer(sendBuff, 0, sendBuff.Length);
-			RegisterSend();
+            // 멀티스레드에서는 인자 공유됨으로 오류 발생
+            // _sendArgs.SetBuffer(sendBuff, 0, sendBuff.Length);
+			lock(_lock)
+			{
+                _sendQueue.Enqueue(sendBuff);
+				if (_pending == false)
+				{
+					RegisterSend();
+				}
+            }            
         }
 
         public void Disconnect()
@@ -51,6 +61,12 @@ namespace Server
 
 		void RegisterSend()
 		{
+			// send에서 호출되므로 별도의 락이 필요 없음
+            _pending = true;
+
+            byte[] buff = _sendQueue.Dequeue();
+			_sendArgs.SetBuffer(buff, 0, buff.Length);
+
 			bool pending = _socket.SendAsync(_sendArgs);
 			if ( pending == false )
 			{
@@ -60,23 +76,39 @@ namespace Server
 
 		void OnSendCompleted(object sender, SocketAsyncEventArgs args)
 		{
-            if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
-            {
-                // 성공
-                try
+            // [락 처리가 필요한 이유]
+            // 1. RegisterSend 에서 호출
+            // 2. _sendArgs callback 으로 호출
+
+			lock(_lock)
+			{
+                if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
                 {
-					// TODO : something...
+                    // 성공
+                    try
+                    {                        
+						// 전송중에 send를 호출해서 send queue에 뭔가 더 들어와 있을 때
+						if ( _sendQueue.Count > 0 )
+						{
+							RegisterSend();
+						}
+						else
+						{
+							// 다 보냄
+                            _pending = false;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        // 혹시에 예외처리
+                        Console.WriteLine($"|OnSendCompleted Failed {e}");
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    // 혹시에 예외처리
-                    Console.WriteLine($"|OnSendCompleted Failed {e}");
+                    Disconnect();
                 }
-            }
-            else
-            {
-                Disconnect();
-            }
+            }            
         }
 
         void RegisterRecv(SocketAsyncEventArgs args)
