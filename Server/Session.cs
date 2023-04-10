@@ -7,6 +7,7 @@ namespace Server
 	public class Session
 	{
 		Socket _socket;
+		int _disconnected = 0;
 
 		public void Start(Socket socket)
 		{
@@ -26,7 +27,11 @@ namespace Server
 		}
 
 		public void Disconnect()
-		{
+		{			
+			// 이미 접속 해제 호출 됐었다면 패스
+			if (Interlocked.Exchange(ref _disconnected, 1) == 1)
+				return;
+
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
         }
