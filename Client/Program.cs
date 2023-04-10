@@ -24,9 +24,12 @@ class Program
                 socket.Connect(endPoint);
                 Console.WriteLine($"Connected to {socket.RemoteEndPoint}");
 
-                byte[] sendBuff = Encoding.UTF8.GetBytes("To Server : Hello");
-                int sendBytes = socket.Send(sendBuff);
-                Console.WriteLine($"< {sendBytes} bytes");
+                for(int i=0;i<5;i++)
+                {
+                    byte[] sendBuff = Encoding.UTF8.GetBytes($"To Server : Hello {i}");
+                    int sendBytes = socket.Send(sendBuff);
+                    Console.WriteLine($"< {sendBytes} bytes");
+                }
 
                 byte[] recvBuff = new byte[1024];
                 int recvBytes = socket.Receive(recvBuff);

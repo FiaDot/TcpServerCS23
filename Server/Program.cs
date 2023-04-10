@@ -11,27 +11,20 @@ class Program
     {
         Console.WriteLine($"| OnAcceptHandler");
         try
-        {
-            // Socket clientSocket = _listener.Accept();
-
-            // recv
-            byte[] recvBuff = new byte[1024];
-            int recvBytes = clientSocket.Receive(recvBuff);
-            string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
-
-            Console.WriteLine($"> {recvData}");
+        {            
+            Session session = new Session();
+            session.Start(clientSocket);
 
             // send
             byte[] sendBuff = Encoding.UTF8.GetBytes("To Client : hello");
-            int sendBytes = clientSocket.Send(sendBuff);
-            Console.WriteLine($"< {sendBytes} bytes");
-            // disconnect
-            clientSocket.Shutdown(SocketShutdown.Both);
-            clientSocket.Close();
+            session.Send(sendBuff);
 
+            // 0.1초 대기 후 접속 끊기
+            Thread.Sleep(100);
+            session.Disconnect();
         }
         catch (Exception e)
-        {
+        { 
             Console.WriteLine(e);
         }
     }
