@@ -6,7 +6,7 @@ namespace Server
 {
 	public class Session
 	{
-		Socket? _socket;
+		Socket _socket;
 
 		public void Start(Socket socket)
 		{

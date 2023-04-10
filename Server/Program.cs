@@ -19,8 +19,9 @@ class Program
             byte[] sendBuff = Encoding.UTF8.GetBytes("To Client : hello");
             session.Send(sendBuff);
 
-            // 0.1초 대기 후 접속 끊기
-            Thread.Sleep(100);
+            // 1초 대기 후 접속 끊기
+            Thread.Sleep(1000);
+            session.Disconnect();
             session.Disconnect();
         }
         catch (Exception e)
