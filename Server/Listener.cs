@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Server
 {
@@ -8,12 +9,14 @@ namespace Server
     {
         Socket _listenSocket;
 
-        Action<Socket> _onAcceptHandler;
+        // Action<Socket> _onAcceptHandler;
+        Func<Session> _sessionFactory; 
 
-        public void Init(IPEndPoint endPoint, Action<Socket> onAcceptHandler)
+
+        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory)
         {
             _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            _onAcceptHandler = onAcceptHandler;
+            _sessionFactory = sessionFactory;
 
             _listenSocket.Bind(endPoint);
 
@@ -49,8 +52,12 @@ namespace Server
         {
             if ( args.SocketError == SocketError.Success )
             {
-                // 성공
-                _onAcceptHandler.Invoke(args.AcceptSocket);
+                // GameSession은 Session을 상속받아 사용.
+                // 그래서 생성할 클래스를 factory로 변경
+                Session session = _sessionFactory.Invoke();
+                session.Start(args.AcceptSocket);
+                // TODO : 접속시 클라이언트 끊기면 에러 발생함 !!!!!
+                session.OnConnected(args.AcceptSocket.RemoteEndPoint);
             }
             else
             {
@@ -61,11 +68,11 @@ namespace Server
             RegisterAccept(args);
         }
 
-        public Socket Accept()
-        {
-            // _listenSocket.AcceptAsync();
-            return _listenSocket.Accept();
-        }
+        //public Socket Accept()
+        //{
+        //    // _listenSocket.AcceptAsync();
+        //    return _listenSocket.Accept();
+        //}
 
     }
 }

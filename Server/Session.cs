@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
 namespace Server
 {
-	public class Session
+	public abstract class Session
 	{
 		Socket _socket;
 
@@ -18,6 +19,12 @@ namespace Server
 		// bool _pending = false;
 		object _lock = new object();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
+
+		// 상속처리를 위한 이벤트
+		public abstract void OnConnected(EndPoint endPoint);
+		public abstract void OnRecv(ArraySegment<byte> buffer);
+		public abstract void OnSend(int numOfBytes);
+		public abstract void OnDisconnected(EndPoint endPoint);
 
         public void Start(Socket socket)
 		{
@@ -59,6 +66,7 @@ namespace Server
 			if (Interlocked.Exchange(ref _disconnected, 1) == 1)
 				return;
 
+			OnDisconnected(_socket.RemoteEndPoint);
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
         }
@@ -107,7 +115,8 @@ namespace Server
 						_sendArgs.BufferList = null; // optional
                         _pendingList.Clear();
 
-						Console.WriteLine($"Send Transffered{_sendArgs.BytesTransferred}");
+						OnSend(_sendArgs.BytesTransferred);
+						
 						// 전송중에 send를 호출해서 send queue에 뭔가 더 들어와 있을 때
 						if ( _sendQueue.Count > 0 )
 						{
@@ -152,8 +161,10 @@ namespace Server
                 // 성공
 				try
 				{
-                    string recvData = Encoding.UTF8.GetString(args.Buffer, args.Offset, args.BytesTransferred);
-                    Console.WriteLine($"> {recvData}");
+					OnRecv(new ArraySegment<byte>(args.Buffer, args.Offset, args.BytesTransferred));
+
+					// 빠져있었음 ㅡ;
+					RegisterRecv();
                 } catch ( Exception e )
 				{
 					// 혹시에 예외처리
