@@ -20,10 +20,14 @@ namespace Server
             int backlog = 10;
             _listenSocket.Listen(backlog);
 
+            // 여러개 대기를 걸어주면 초기접속 빠르게 가능!
+            // for(int n=0;n<10;n++)
+            // {
             SocketAsyncEventArgs args = new SocketAsyncEventArgs();
             args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
 
             RegisterAccept(args);
+            // } 
         }
 
         void RegisterAccept(SocketAsyncEventArgs args)
