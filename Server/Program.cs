@@ -37,12 +37,12 @@ class Program
                 int recvBytes = clientSocket.Receive(recvBuff);
                 string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
 
-                Console.WriteLine($"> ${recvData}");
+                Console.WriteLine($"> {recvData}");
 
                 // TODO : send
-                byte[] sendBuff = Encoding.UTF8.GetBytes("From Server");
-                clientSocket.Send(sendBuff);
-
+                byte[] sendBuff = Encoding.UTF8.GetBytes("To Client : hello");
+                int sendBytes = clientSocket.Send(sendBuff);
+                Console.WriteLine($"< {sendBytes} bytes");
                 // disconnect
                 clientSocket.Shutdown(SocketShutdown.Both);
                 clientSocket.Close();
