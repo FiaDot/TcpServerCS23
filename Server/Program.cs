@@ -39,7 +39,7 @@ class Program
 
                 Console.WriteLine($"> {recvData}");
 
-                // TODO : send
+                // send
                 byte[] sendBuff = Encoding.UTF8.GetBytes("To Client : hello");
                 int sendBytes = clientSocket.Send(sendBuff);
                 Console.WriteLine($"< {sendBytes} bytes");
