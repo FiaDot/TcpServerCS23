@@ -7,6 +7,35 @@ class Program
 {
     static Listener _listener = new Listener();
 
+    static void OnAcceptHandler(Socket clientSocket)
+    {
+        Console.WriteLine($"| OnAcceptHandler");
+        try
+        {
+            // Socket clientSocket = _listener.Accept();
+
+            // recv
+            byte[] recvBuff = new byte[1024];
+            int recvBytes = clientSocket.Receive(recvBuff);
+            string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
+
+            Console.WriteLine($"> {recvData}");
+
+            // send
+            byte[] sendBuff = Encoding.UTF8.GetBytes("To Client : hello");
+            int sendBytes = clientSocket.Send(sendBuff);
+            Console.WriteLine($"< {sendBytes} bytes");
+            // disconnect
+            clientSocket.Shutdown(SocketShutdown.Both);
+            clientSocket.Close();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
     static void Main(string[] args)
     {
         Console.WriteLine("Starting Server...");
@@ -18,35 +47,14 @@ class Program
         IPAddress ipAddr = ipHost.AddressList[0];
         IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
 
-        _listener.Init(endPoint);
-        
-        try
-        {        
-            while (true)
-            {
-                Console.WriteLine($"Listening...{port}");
+        _listener.Init(endPoint, OnAcceptHandler);
 
-                Socket clientSocket = _listener.Accept();
+        Console.WriteLine($"Listening...{port}");
 
-                // recv
-                byte[] recvBuff = new byte[1024];
-                int recvBytes = clientSocket.Receive(recvBuff);
-                string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
-
-                Console.WriteLine($"> {recvData}");
-
-                // send
-                byte[] sendBuff = Encoding.UTF8.GetBytes("To Client : hello");
-                int sendBytes = clientSocket.Send(sendBuff);
-                Console.WriteLine($"< {sendBytes} bytes");
-                // disconnect
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
-            }
-        } catch (Exception e)
+        while (true)
         {
-            Console.WriteLine(e);
-        }
+            ;
+        }      
     }
 }
 
