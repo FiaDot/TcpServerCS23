@@ -7,9 +7,13 @@ namespace Server
 	public class Session
 	{
 		Socket _socket;
+
+		// 접속 해제 처리 여부 (0=미처리,1=처리완료)
 		int _disconnected = 0;
 
-		public void Start(Socket socket)
+        SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
+
+        public void Start(Socket socket)
 		{
 			_socket = socket;
 
@@ -18,15 +22,22 @@ namespace Server
             // recvArgs.UserToken // 식별자로 customize 가능
             recvArgs.SetBuffer(new byte[1024], 0, 1024);
 
-			RegisterRecv(recvArgs);
+            _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
+
+            RegisterRecv(recvArgs);
         }
 
-		public void Send(byte[] sendBuff)
+        public void Send(byte[] sendBuff)
 		{
-			_socket.Send(sendBuff);
-		}
+            // _socket.Send(sendBuff);
+			// 잦은 호출과 인자 재사용이 포인트
 
-		public void Disconnect()
+			// 멀티스레드에서는 인자 공유됨으로 오류 발생
+            _sendArgs.SetBuffer(sendBuff, 0, sendBuff.Length);
+			RegisterSend();
+        }
+
+        public void Disconnect()
 		{			
 			// 이미 접속 해제 호출 됐었다면 패스
 			if (Interlocked.Exchange(ref _disconnected, 1) == 1)
@@ -36,7 +47,38 @@ namespace Server
             _socket.Close();
         }
 
-        #region 네트워크 통신 
+        #region 네트워크 통신
+
+		void RegisterSend()
+		{
+			bool pending = _socket.SendAsync(_sendArgs);
+			if ( pending == false )
+			{
+				OnSendCompleted(null, _sendArgs);
+			}
+		}
+
+		void OnSendCompleted(object sender, SocketAsyncEventArgs args)
+		{
+            if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
+            {
+                // 성공
+                try
+                {
+					// TODO : something...
+                }
+                catch (Exception e)
+                {
+                    // 혹시에 예외처리
+                    Console.WriteLine($"|OnSendCompleted Failed {e}");
+                }
+            }
+            else
+            {
+                Disconnect();
+            }
+        }
+
         void RegisterRecv(SocketAsyncEventArgs args)
         {
 			bool pending = _socket.ReceiveAsync(args);
@@ -65,7 +107,7 @@ namespace Server
             }
 			else
 			{
-				// TODO : disconnect
+				Disconnect();				
 			}
 		}
         #endregion
