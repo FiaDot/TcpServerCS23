@@ -16,18 +16,20 @@ namespace Server
 		bool _pending = false;
 		object _lock = new object();
 
+
+        SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
         public void Start(Socket socket)
 		{
 			_socket = socket;
 
-			SocketAsyncEventArgs recvArgs = new SocketAsyncEventArgs();
-			recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
+
+            _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
             // recvArgs.UserToken // 식별자로 customize 가능
-            recvArgs.SetBuffer(new byte[1024], 0, 1024);
+            _recvArgs.SetBuffer(new byte[1024], 0, 1024);
 
             _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
 
-            RegisterRecv(recvArgs);
+            RegisterRecv();
         }
 
         public void Send(byte[] sendBuff)
@@ -90,7 +92,7 @@ namespace Server
 						// 전송중에 send를 호출해서 send queue에 뭔가 더 들어와 있을 때
 						if ( _sendQueue.Count > 0 )
 						{
-							RegisterSend();
+							RegisterSend(); 
 						}
 						else
 						{
@@ -111,13 +113,13 @@ namespace Server
             }            
         }
 
-        void RegisterRecv(SocketAsyncEventArgs args)
+        void RegisterRecv()
         {
-			bool pending = _socket.ReceiveAsync(args);
+			bool pending = _socket.ReceiveAsync(_recvArgs);
 			if ( pending == false)
 			{
 				// 바로 받아짐
-				OnRecvCompleted(null, args);
+				OnRecvCompleted(null, _recvArgs);
 			}
 
 		}
