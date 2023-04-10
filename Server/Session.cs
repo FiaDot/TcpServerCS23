@@ -11,13 +11,13 @@ namespace Server
 		// 접속 해제 처리 여부 (0=미처리,1=처리완료)
 		int _disconnected = 0;
 
+        SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
+
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
 		Queue<byte[]> _sendQueue = new Queue<byte[]>();
 		bool _pending = false;
-		object _lock = new object();
+		object _lock = new object();       
 
-
-        SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
         public void Start(Socket socket)
 		{
 			_socket = socket;
