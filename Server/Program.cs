@@ -5,6 +5,8 @@ using System.Text;
 namespace Server;
 class Program
 {
+    static Listener _listener = new Listener();
+
     static void Main(string[] args)
     {
         Console.WriteLine("Starting Server...");
@@ -16,21 +18,15 @@ class Program
         IPAddress ipAddr = ipHost.AddressList[0];
         IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
 
-        Socket listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
+        _listener.Init(endPoint);
+        
         try
-        {
-            listenSocket.Bind(endPoint);
-
-            int backlog = 10;
-            listenSocket.Listen(backlog);
-
-
+        {        
             while (true)
             {
                 Console.WriteLine($"Listening...{port}");
 
-                Socket clientSocket = listenSocket.Accept();
+                Socket clientSocket = _listener.Accept();
 
                 // recv
                 byte[] recvBuff = new byte[1024];
