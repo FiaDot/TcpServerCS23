@@ -15,8 +15,9 @@ namespace Server
 
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
 		Queue<byte[]> _sendQueue = new Queue<byte[]>();
-		bool _pending = false;
-		object _lock = new object();       
+		// bool _pending = false;
+		object _lock = new object();
+        List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
 
         public void Start(Socket socket)
 		{
@@ -42,7 +43,10 @@ namespace Server
 			lock(_lock)
 			{
                 _sendQueue.Enqueue(sendBuff);
-				if (_pending == false)
+
+				// 대기중인거 없음
+				// if (_pending == false)
+				if ( _pendingList.Count == 0)
 				{
 					RegisterSend();
 				}
@@ -64,12 +68,23 @@ namespace Server
 		void RegisterSend()
 		{
 			// send에서 호출되므로 별도의 락이 필요 없음
-            _pending = true;
+            // _pending = true;
 
-            byte[] buff = _sendQueue.Dequeue();
-			_sendArgs.SetBuffer(buff, 0, buff.Length);
+			// 불필요 코드 인듯 ...
+			// _pendingList.Clear();
 
-			bool pending = _socket.SendAsync(_sendArgs);
+			while( _sendQueue.Count > 0 )
+			{
+                byte[] buff = _sendQueue.Dequeue();
+                // _sendArgs.SetBuffer(buff, 0, buff.Length);
+                // or _sendArgs.BufferList 사용 (개별 패킷에 대해 .Add는 안됨)
+                _pendingList.Add(new ArraySegment<byte>(buff, 0, buff.Length));                
+            }
+
+            _sendArgs.BufferList = _pendingList;
+			
+			
+            bool pending = _socket.SendAsync(_sendArgs);
 			if ( pending == false )
 			{
 				OnSendCompleted(null, _sendArgs);
@@ -88,17 +103,23 @@ namespace Server
                 {
                     // 성공
                     try
-                    {                        
+                    {						
+						_sendArgs.BufferList = null; // optional
+                        _pendingList.Clear();
+
+						Console.WriteLine($"Send Transffered{_sendArgs.BytesTransferred}");
 						// 전송중에 send를 호출해서 send queue에 뭔가 더 들어와 있을 때
 						if ( _sendQueue.Count > 0 )
 						{
 							RegisterSend(); 
 						}
+						/*
 						else
 						{
 							// 다 보냄
                             _pending = false;
                         }
+						*/
                     }
                     catch (Exception e)
                     {
