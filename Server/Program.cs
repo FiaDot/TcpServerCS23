@@ -10,7 +10,13 @@ class Knight
     public int attack;
 }
 
-class GameSession : Session
+class Packet
+{
+    public ushort size;
+    public ushort packetId;
+}
+
+class GameSession : PacketSession
 {
     public override void OnConnected(EndPoint endPoint)
     {
@@ -21,30 +27,30 @@ class GameSession : Session
         //Send(sendBuff);
 
         
-        Knight knight = new Knight() { hp = 100, attack = 10 };
-        byte[] buffer = BitConverter.GetBytes(knight.hp);
-        byte[] buffer2 = BitConverter.GetBytes(knight.attack);
+            //Packet packet = new Packet() { size = 4, packetId = 10 };
+            //byte[] buffer = BitConverter.GetBytes(packet.size);
+            //byte[] buffer2 = BitConverter.GetBytes(packet.packetId);
 
-        // serialize
-        /*
-        byte[] sendBuff = new byte[1024];
-        // src, srcIdx, dst, dstIdx, len
-        Array.Copy(buffer, 0, sendBuff, 0, buffer.Length);
-        Array.Copy(buffer2, 0, sendBuff, buffer.Length, buffer2.Length);
-        Send(sendBuff);
-        */
+            //// serialize
+            ///*
+            //byte[] sendBuff = new byte[1024];
+            //// src, srcIdx, dst, dstIdx, len
+            //Array.Copy(buffer, 0, sendBuff, 0, buffer.Length);
+            //Array.Copy(buffer2, 0, sendBuff, buffer.Length, buffer2.Length);
+            //Send(sendBuff);
+            //*/
 
-        // use SendBuffer
-        ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
-        // byte[] sendBuff = new byte[1024];
-        // src, srcIdx, dst, dstIdx, len
-        Array.Copy(buffer, 0, openSegment.Array, openSegment.Offset, buffer.Length);
-        Array.Copy(buffer2, 0, openSegment.Array, openSegment.Offset + buffer.Length, buffer2.Length);
-        ArraySegment<byte> sendBuff = SendBufferHelper.Close(buffer.Length + buffer2.Length);       
-        Send(sendBuff);
+            //// use SendBuffer
+            //ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
+            //// byte[] sendBuff = new byte[1024];
+            //// src, srcIdx, dst, dstIdx, len
+            //Array.Copy(buffer, 0, openSegment.Array, openSegment.Offset, buffer.Length);
+            //Array.Copy(buffer2, 0, openSegment.Array, openSegment.Offset + buffer.Length, buffer2.Length);
+            //ArraySegment<byte> sendBuff = SendBufferHelper.Close(buffer.Length + buffer2.Length);       
+            //Send(sendBuff);
 
         // 1초 대기 후 접속 끊기
-        Thread.Sleep(1000);
+        Thread.Sleep(5000);
         Disconnect();
     }
 
@@ -53,12 +59,20 @@ class GameSession : Session
         Console.WriteLine($"| OnDisconnected : ${endPoint}");
     }
 
-    public override int OnRecv(ArraySegment<byte> buffer)
-    {
-        string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
-        Console.WriteLine($"> {recvData}");
+    //public override int OnRecv(ArraySegment<byte> buffer)
+    //{
+    //    string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
+    //    Console.WriteLine($"> {recvData}");
 
-        return buffer.Count;
+    //    return buffer.Count;
+    //}
+
+    public override void OnRecvPacket(ArraySegment<byte> buffer)
+    {
+        ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+        ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + 2); // +2 (size field)
+
+        Console.WriteLine($"PacketId={packetId},Size={size}");
     }
 
     public override void OnSend(int numOfBytes)
