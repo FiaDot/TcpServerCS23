@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using static System.Collections.Specialized.BitVector32;
 
-namespace Server
+namespace ServerCore
 {
 	public class Listener
     {

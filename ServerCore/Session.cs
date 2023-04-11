@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Server
+namespace ServerCore
 {
 	public abstract class Session
 	{
