@@ -4,6 +4,12 @@ using System.Text;
 
 namespace ServerCore;
 
+class Knight
+{
+    public int hp;
+    public int attack;
+}
+
 class GameSession : Session
 {
     public override void OnConnected(EndPoint endPoint)
@@ -11,7 +17,30 @@ class GameSession : Session
         Console.WriteLine($"| OnConnected : ${endPoint}");
 
         // send
-        byte[] sendBuff = Encoding.UTF8.GetBytes("To Client : hello");
+        //byte[] sendBuff = Encoding.UTF8.GetBytes("To Client : hello");
+        //Send(sendBuff);
+
+        
+        Knight knight = new Knight() { hp = 100, attack = 10 };
+        byte[] buffer = BitConverter.GetBytes(knight.hp);
+        byte[] buffer2 = BitConverter.GetBytes(knight.attack);
+
+        // serialize
+        /*
+        byte[] sendBuff = new byte[1024];
+        // src, srcIdx, dst, dstIdx, len
+        Array.Copy(buffer, 0, sendBuff, 0, buffer.Length);
+        Array.Copy(buffer2, 0, sendBuff, buffer.Length, buffer2.Length);
+        Send(sendBuff);
+        */
+
+        // use SendBuffer
+        ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
+        // byte[] sendBuff = new byte[1024];
+        // src, srcIdx, dst, dstIdx, len
+        Array.Copy(buffer, 0, openSegment.Array, openSegment.Offset, buffer.Length);
+        Array.Copy(buffer2, 0, openSegment.Array, openSegment.Offset + buffer.Length, buffer2.Length);
+        ArraySegment<byte> sendBuff = SendBufferHelper.Close(buffer.Length + buffer2.Length);       
         Send(sendBuff);
 
         // 1초 대기 후 접속 끊기

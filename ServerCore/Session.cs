@@ -17,7 +17,7 @@ namespace ServerCore
         SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
 
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
-		Queue<byte[]> _sendQueue = new Queue<byte[]>();
+		Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();
 		// bool _pending = false;
 		object _lock = new object();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
@@ -42,7 +42,7 @@ namespace ServerCore
             RegisterRecv();
         }
 
-        public void Send(byte[] sendBuff)
+        public void Send(ArraySegment<byte> sendBuff)
 		{
             // _socket.Send(sendBuff);
             // 잦은 호출과 인자 재사용이 포인트
@@ -85,10 +85,11 @@ namespace ServerCore
 
 			while( _sendQueue.Count > 0 )
 			{
-                byte[] buff = _sendQueue.Dequeue();
+                ArraySegment<byte> buff = _sendQueue.Dequeue();
                 // _sendArgs.SetBuffer(buff, 0, buff.Length);
                 // or _sendArgs.BufferList 사용 (개별 패킷에 대해 .Add는 안됨)
-                _pendingList.Add(new ArraySegment<byte>(buff, 0, buff.Length));                
+                _pendingList.Add(buff);
+
             }
 
             _sendArgs.BufferList = _pendingList;
