@@ -12,6 +12,8 @@ namespace ServerCore
 		// 접속 해제 처리 여부 (0=미처리,1=처리완료)
 		int _disconnected = 0;
 
+		RecvBuffer _recvBuffer = new RecvBuffer(1024);
+
         SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
 
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
@@ -22,7 +24,7 @@ namespace ServerCore
 
 		// 상속처리를 위한 이벤트
 		public abstract void OnConnected(EndPoint endPoint);
-		public abstract void OnRecv(ArraySegment<byte> buffer);
+		public abstract int OnRecv(ArraySegment<byte> buffer);
 		public abstract void OnSend(int numOfBytes);
 		public abstract void OnDisconnected(EndPoint endPoint);
 
@@ -33,7 +35,7 @@ namespace ServerCore
 
             _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
             // recvArgs.UserToken // 식별자로 customize 가능
-            _recvArgs.SetBuffer(new byte[1024], 0, 1024);
+            // _recvArgs.SetBuffer(new byte[1024], 0, 1024);
 
             _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
 
@@ -145,6 +147,13 @@ namespace ServerCore
 
         void RegisterRecv()
         {
+			// 받기 전에 버퍼 공간 확보
+			_recvBuffer.Clean();
+
+			// 쓰기 세그먼트에다가 받으면 됨
+			ArraySegment<byte> segment = _recvBuffer.WriteSegment;
+			_recvArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
+
 			bool pending = _socket.ReceiveAsync(_recvArgs);
 			if ( pending == false)
 			{
@@ -161,10 +170,31 @@ namespace ServerCore
                 // 성공
 				try
 				{
-					OnRecv(new ArraySegment<byte>(args.Buffer, args.Offset, args.BytesTransferred));
+					// write corsor 이동
+					if ( !_recvBuffer.OnWrite(args.BytesTransferred) )
+					{ 
+						Disconnect();
+						return;
+					}
 
-					// 빠져있었음 ㅡ;
-					RegisterRecv();
+                    // OnRecv(new ArraySegment<byte>(args.Buffer, args.Offset, args.BytesTransferred));
+                    int processedLen = OnRecv(_recvBuffer.ReadSegment);
+					if (processedLen < 0 || _recvBuffer.DataSize < processedLen )
+					{
+						// 컨텐츠쪽에서 잘못된 사이즈를 반환 했거나 가지고 있는 사이즈 보다 많이 처리했다면 
+						Disconnect();
+						return;
+					}
+
+					// 처리한만큼 read 이동
+					if ( !_recvBuffer.OnRead(processedLen))
+					{
+						Disconnect();
+						return;
+					}
+
+                    // 빠져있었음 ㅡ;
+                    RegisterRecv();
                 } catch ( Exception e )
 				{
 					// 혹시에 예외처리
