@@ -62,6 +62,16 @@ namespace ServerCore
 		public abstract void OnSend(int numOfBytes);
 		public abstract void OnDisconnected(EndPoint endPoint);
 
+        void Clear()
+        {
+            // 접속 해제시 버퍼 해제
+            lock(_lock)
+            {
+                _sendQueue.Clear();
+                _pendingList.Clear();
+            }
+        }
+
         public void Start(Socket socket)
 		{
 			_socket = socket;
@@ -105,19 +115,24 @@ namespace ServerCore
 			OnDisconnected(_socket.RemoteEndPoint);
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
+            Clear();
         }
 
         #region 네트워크 통신
 
 		void RegisterSend()
 		{
-			// send에서 호출되므로 별도의 락이 필요 없음
+			// 이미 접속 끊긴 상태
+			if (1 == _disconnected)
+				return;
+
+            // send에서 호출되므로 별도의 락이 필요 없음
             // _pending = true;
 
-			// 불필요 코드 인듯 ...
-			// _pendingList.Clear();
+            // 불필요 코드 인듯 ...
+            // _pendingList.Clear(); 
 
-			while( _sendQueue.Count > 0 )
+            while ( _sendQueue.Count > 0 )
 			{
                 ArraySegment<byte> buff = _sendQueue.Dequeue();
                 // _sendArgs.SetBuffer(buff, 0, buff.Length);
@@ -128,12 +143,18 @@ namespace ServerCore
 
             _sendArgs.BufferList = _pendingList;
 			
-			
-            bool pending = _socket.SendAsync(_sendArgs);
-			if ( pending == false )
-			{
-				OnSendCompleted(null, _sendArgs);
-			}
+
+            try
+            {
+                bool pending = _socket.SendAsync(_sendArgs);
+                if (pending == false)
+                {
+                    OnSendCompleted(null, _sendArgs);
+                }
+            } catch ( Exception e )
+            {
+                Console.WriteLine($"! RegisterSend failed {e}");
+            }            
 		}
 
 		void OnSendCompleted(object sender, SocketAsyncEventArgs args)
@@ -182,21 +203,30 @@ namespace ServerCore
 
         void RegisterRecv()
         {
-			// 받기 전에 버퍼 공간 확보
-			_recvBuffer.Clean();
+            // 이미 접속 끊긴 상태
+            if (1 == _disconnected)
+                return;
+
+            // 받기 전에 버퍼 공간 확보
+            _recvBuffer.Clean();
 
 			// 쓰기 세그먼트에다가 받으면 됨
 			ArraySegment<byte> segment = _recvBuffer.WriteSegment;
 			_recvArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
 
-			bool pending = _socket.ReceiveAsync(_recvArgs);
-			if ( pending == false)
-			{
-				// 바로 받아짐
-				OnRecvCompleted(null, _recvArgs);
-			}
-
-		}
+            try
+            { 
+			    bool pending = _socket.ReceiveAsync(_recvArgs);
+			    if ( pending == false)
+			    {
+				    // 바로 받아짐
+				    OnRecvCompleted(null, _recvArgs);
+			    }
+            } catch (Exception e )
+            {
+                Console.WriteLine($"! RegisterRecv failed {e}");
+            }
+        }
 
 		void OnRecvCompleted(object? sender, SocketAsyncEventArgs args)
 		{
