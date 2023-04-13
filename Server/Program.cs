@@ -12,6 +12,9 @@ class Program
 
     static void Main(string[] args)
     {
+        PacketManager.Instance.Register();
+
+
         // serialize 
         S_Ping encode = new S_Ping()
         {
@@ -20,6 +23,8 @@ class Program
 
         int size = encode.CalculateSize();
         byte[] sendBuffer = encode.ToByteArray();
+
+        // MsgId.SPing
 
         // deserialize
 

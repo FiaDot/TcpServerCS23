@@ -63,10 +63,12 @@ namespace Server
 
         public override void OnRecvPacket(ArraySegment<byte> buffer)
         {
-            ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
-            ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + 2); // +2 (size field)
+            //ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+            //ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + 2); // +2 (size field)
 
-            Console.WriteLine($"PacketId={packetId},Size={size}");
+            //Console.WriteLine($"PacketId={packetId},Size={size}");
+
+            PacketManager.Instance.OnRecvPacket(this, buffer);
         }
 
         public override void OnSend(int numOfBytes)
