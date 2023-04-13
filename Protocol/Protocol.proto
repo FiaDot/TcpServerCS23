@@ -1,0 +1,53 @@
+// See README.md for information and build instructions.
+//
+// Note: START and END tags are used in comments to define sections used in
+// tutorials.  They are not part of the syntax for Protocol Buffers.
+//
+// To get an in-depth walkthrough of this file and the related examples, see:
+// https://developers.google.com/protocol-buffers/docs/tutorials
+
+// [START declaration]
+syntax = "proto3";
+package Protocol;
+
+import "google/protobuf/timestamp.proto";
+// [END declaration]
+
+// [START csharp_declaration]
+option csharp_namespace = "Google.Protobuf.Protocol";
+// [END csharp_declaration]
+
+
+// [START messages]
+// S_ : C->S
+// C_ : S->C
+enum MsgId {
+    S_PING = 0;    
+    S_LOGIN = 1;
+    S_LOGOUT = 2;
+    S_CHAT = 3;
+    C_CHAT = 4;
+    // S_SPAWN = 3;
+    // S_DESPAWN = 4;
+    // C_MOVE = 5;
+    // S_MOVE = 6;
+}
+
+message S_Ping {
+    int32 time = 1;
+}
+
+message S_Login {
+    string name = 1;    
+}
+
+message S_Chat {
+    string msg = 1;
+}
+
+message C_Chat {
+    string name = 1;
+    string msg = 2;
+}
+
+// [END messages]
