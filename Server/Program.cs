@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using Google.Protobuf;
+using Google.Protobuf.Protocol;
 using Server;
 
 namespace ServerCore;
@@ -10,6 +12,23 @@ class Program
 
     static void Main(string[] args)
     {
+        // serialize 
+        S_Ping encode = new S_Ping()
+        {
+            Time = 1234,
+        };
+
+        int size = encode.CalculateSize();
+        byte[] sendBuffer = encode.ToByteArray();
+
+        // deserialize
+
+        S_Ping decode = new S_Ping();
+        decode.MergeFrom(sendBuffer);
+
+
+        Console.WriteLine($"time={decode.Time}");
+        
         Console.WriteLine("Starting Server...");
 
 
