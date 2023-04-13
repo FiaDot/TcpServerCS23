@@ -7,13 +7,13 @@ namespace Server
 {
 	public class PacketHandler
 	{
-		public static void SPingHandler(PacketSession session, IMessage packet)
+		public static void S_PingHandler(PacketSession session, IMessage packet)
 		{
 			S_Ping decode = packet as S_Ping;
-			Console.WriteLine($"SPing: {decode.Time}");
-		}
-
-		
+			// ClientSession serverSession = session as ClientSession;
+			
+			Console.WriteLine($"SPing: Time={decode.Time}");
+		}		
 	}
 }
 

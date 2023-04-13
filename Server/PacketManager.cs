@@ -18,28 +18,20 @@ namespace Server
                 return _instance;
             }
 		}
+
+        PacketManager()
+        {
+            Register();
+        }
         #endregion
 
-        Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>>();
-        Dictionary<ushort, Action<PacketSession, IMessage>> _handler = new Dictionary<ushort, Action<PacketSession, IMessage>>();
+        Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
+        Dictionary<ushort, Action<PacketSession, IMessage>> _handler = new Dictionary<ushort, Action<PacketSession, IMessage>>();        
 
-        // ClientSession?
         public void Register()
-		{
+		{            
             _onRecv.Add((ushort)MsgId.SPing, MakePacket<S_Ping>);
-            _handler.Add((ushort)MsgId.SPing, PacketHandler.SPingHandler);
-        }
-
-        void MakePacket<T>(PacketSession session, ArraySegment<byte> buffer) where T : IMessage, new()
-        {
-            T p = new T();
-            p.MergeFrom(buffer.Array);
-            
-
-            Action<PacketSession, IMessage>? action = null;
-            // TODO : protobuf id 필요 한데 ;;
-            if ( _handler.TryGetValue((ushort)MsgId.SPing, out action) )
-                action.Invoke(session, p);
+            _handler.Add((ushort)MsgId.SPing, PacketHandler.S_PingHandler);
         }
 
         public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
@@ -50,12 +42,26 @@ namespace Server
             ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count); // +2 (size field)
             count += 2;
 
-            Action<PacketSession, ArraySegment<byte>>? action = null;
-            if ( _onRecv.TryGetValue(packetId, out action) )
+            Action<PacketSession, ArraySegment<byte>, ushort>? action = null;
+            if (_onRecv.TryGetValue(packetId, out action))
             {
-                action.Invoke(session, buffer);
+                action.Invoke(session, buffer, packetId);
             }
-        }      
+        }
+
+        void MakePacket<T>(PacketSession session, ArraySegment<byte> buffer, ushort id) where T : IMessage, new()
+        {
+            T packet = new T();
+            // len(2) + id(2) 해서 4바이트 조절
+            packet.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
+            
+            Action<PacketSession, IMessage>? action = null;
+            
+            if ( _handler.TryGetValue(id, out action) )
+                action.Invoke(session, packet);
+        }
+
+
     }
 }
 

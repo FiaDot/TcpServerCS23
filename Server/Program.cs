@@ -12,7 +12,7 @@ class Program
 
     static void Main(string[] args)
     {
-        PacketManager.Instance.Register();
+        // PacketManager.Instance.Register();
 
 
         // serialize 

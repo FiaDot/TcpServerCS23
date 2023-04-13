@@ -1,4 +1,6 @@
-﻿using ServerCore;
+﻿using Google.Protobuf;
+using Google.Protobuf.Protocol;
+using ServerCore;
 using System.Net;
 using System.Text;
 
@@ -16,22 +18,40 @@ namespace Client
         {
             Console.WriteLine($"| OnConnected : ${endPoint}");
 
-            Packet packet = new Packet() { size = 4, packetId = 12 };
+            //Packet packet = new Packet() { size = 4, packetId = 12 };
 
-            // send 
-            for (int i = 0; i < 5; i++)
+            //// send 
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    byte[] buffer = BitConverter.GetBytes(packet.size);
+            //    byte[] buffer2 = BitConverter.GetBytes(packet.packetId);
+
+            //    // use SendBuffer
+            //    ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
+
+            //    Array.Copy(buffer, 0, openSegment.Array, openSegment.Offset, buffer.Length);
+            //    Array.Copy(buffer2, 0, openSegment.Array, openSegment.Offset + buffer.Length, buffer2.Length);
+            //    ArraySegment<byte> sendBuff = SendBufferHelper.Close(packet.size);
+            //    Send(sendBuff);
+            //}
+
+            S_Ping encode = new S_Ping()
             {
-                byte[] buffer = BitConverter.GetBytes(packet.size);
-                byte[] buffer2 = BitConverter.GetBytes(packet.packetId);
+                Time = 1234,
+            };
 
-                // use SendBuffer
-                ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
+            int size = encode.CalculateSize();
+            // byte[] sendBuffer = encode.ToByteArray();
+            byte[] sendBuffer = new byte[size + 4];
+            // write size
+            Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
+            // write id
+            ushort id = (ushort)MsgId.SPing;
+            Array.Copy(BitConverter.GetBytes(id), 0, sendBuffer, 2, sizeof(ushort));
+            // write encoded
+            Array.Copy(encode.ToByteArray(), 0, sendBuffer, 4, size);
 
-                Array.Copy(buffer, 0, openSegment.Array, openSegment.Offset, buffer.Length);
-                Array.Copy(buffer2, 0, openSegment.Array, openSegment.Offset + buffer.Length, buffer2.Length);
-                ArraySegment<byte> sendBuff = SendBufferHelper.Close(packet.size);
-                Send(sendBuff);
-            }
+            Send(new ArraySegment<byte>(sendBuffer));
         }
 
         public override void OnDisconnected(EndPoint endPoint)

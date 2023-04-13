@@ -19,8 +19,8 @@ option csharp_namespace = "Google.Protobuf.Protocol";
 
 
 // [START messages]
-// S_ : C->S
-// C_ : S->C
+// S_ : S->C
+// C_ : C->S
 enum MsgId {
     S_PING = 0;    
     S_LOGIN = 1;
@@ -42,12 +42,12 @@ message S_Login {
 }
 
 message S_Chat {
-    string msg = 1;
+    string name = 1;
+    string msg = 2;    
 }
 
-message C_Chat {
-    string name = 1;
-    string msg = 2;
+message C_Chat {    
+    string msg = 1;
 }
 
 // [END messages]

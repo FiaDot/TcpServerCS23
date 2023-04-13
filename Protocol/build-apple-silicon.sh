@@ -3,3 +3,4 @@ FILENAME="Protocol"
 ./protoc-3.12.3-osx-x86_64/bin/protoc $FILENAME.proto --csharp_out .
 
 /bin/cp -f $FILENAME.cs ../Server/$FILENAME.cs
+/bin/cp -f $FILENAME.cs ../Client/$FILENAME.cs
