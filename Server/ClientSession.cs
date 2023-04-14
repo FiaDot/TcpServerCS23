@@ -1,6 +1,8 @@
 ﻿using System;
 using ServerCore;
 using System.Net;
+using Google.Protobuf;
+using Google.Protobuf.Protocol;
 
 namespace Server
 {
@@ -12,6 +14,25 @@ namespace Server
 
     class ClientSession : PacketSession
     {
+        public void Send(IMessage message)
+        {
+            string messageName = message.Descriptor.Name.Replace("_", string.Empty);
+            // TODO : try catch
+            MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), messageName);
+
+            int size = message.CalculateSize();
+            
+            byte[] sendBuffer = new byte[size + 4];
+            // write size
+            Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
+            // write id
+            Array.Copy(BitConverter.GetBytes((ushort)msgId), 0, sendBuffer, 2, sizeof(ushort));
+            // write encoded
+            Array.Copy(message.ToByteArray(), 0, sendBuffer, 4, size);
+
+            Send(new ArraySegment<byte>(sendBuffer));
+        }
+
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"| OnConnected : ${endPoint}");

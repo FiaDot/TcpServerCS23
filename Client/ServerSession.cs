@@ -14,6 +14,27 @@ namespace Client
 
     public class ServerSession : Session
     {
+        // protobuf Send wrapper
+        public void Send(IMessage message)
+        {
+            string messageName = message.Descriptor.Name.Replace("_", string.Empty);
+            // TODO : try catch
+            MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), messageName);
+
+            int size = message.CalculateSize();
+
+            byte[] sendBuffer = new byte[size + 4];
+            // write size
+            Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
+            // write id
+            Array.Copy(BitConverter.GetBytes((ushort)msgId), 0, sendBuffer, 2, sizeof(ushort));
+            // write encoded
+            Array.Copy(message.ToByteArray(), 0, sendBuffer, 4, size);
+
+            Send(new ArraySegment<byte>(sendBuffer));
+        }
+
+
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"| OnConnected : ${endPoint}");
@@ -40,23 +61,26 @@ namespace Client
                 Time = 1234,
             };
 
-            int size = encode.CalculateSize();
-            // byte[] sendBuffer = encode.ToByteArray();
-            byte[] sendBuffer = new byte[size + 4];
-            // write size
-            Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
-            // write id
-            ushort id = (ushort)MsgId.SPing;
-            Array.Copy(BitConverter.GetBytes(id), 0, sendBuffer, 2, sizeof(ushort));
-            // write encoded
-            Array.Copy(encode.ToByteArray(), 0, sendBuffer, 4, size);
 
-            Send(new ArraySegment<byte>(sendBuffer));
+            //int size = encode.CalculateSize();
+            //// byte[] sendBuffer = encode.ToByteArray();
+            //byte[] sendBuffer = new byte[size + 4];
+            //// write size
+            //Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
+            //// write id
+            //ushort id = (ushort)MsgId.SPing;
+            //Array.Copy(BitConverter.GetBytes(id), 0, sendBuffer, 2, sizeof(ushort));
+            //// write encoded
+            //Array.Copy(encode.ToByteArray(), 0, sendBuffer, 4, size);
+
+            //Send(new ArraySegment<byte>(sendBuffer));
+
+            Send(encode);
         }
 
         public override void OnDisconnected(EndPoint endPoint)
         {
-            Console.WriteLine($"| OnDisconnected : ${endPoint}");
+            Console.WriteLine($"| OnDisconnected : {endPoint}");
         }
 
         public override int OnRecv(ArraySegment<byte> buffer)
