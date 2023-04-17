@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
 					else if (_dir == MoveDir.Left)
 					{
 						_animator.Play("IDLE_RIGHT");
-						transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+						transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f); // 애니가 오른쪽 기준이라 회전시켜줌
 					}
 					else
 					{
