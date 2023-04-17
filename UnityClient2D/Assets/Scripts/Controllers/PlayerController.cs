@@ -11,10 +11,70 @@ public class PlayerController : MonoBehaviour
 	private Vector3Int _cellPos = Vector3Int.zero;
 	
     public float _speed = 5.0f;
-	MoveDir Dir = Define.MoveDir.None;
-	private bool _isMoving = false;
+    private bool _isMoving = false;
+
+    private Animator _animator;
+	MoveDir _dir = MoveDir.Down;
+
+	public MoveDir Dir
+	{
+		get { return _dir; }
+		set
+		{
+			if (_dir == value)
+				return;
+			
+			switch (value)
+			{
+				case MoveDir.Up:
+					_animator.Play("WALK_BACK");
+					transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+					break;
+				case MoveDir.Down:
+					_animator.Play("WALK_FRONT");
+					transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+					break;
+				case MoveDir.Left:
+					_animator.Play("WALK_RIGHT");
+					transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+					break;
+				case MoveDir.Right:
+					_animator.Play("WALK_RIGHT");
+					transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+					break;
+				case MoveDir.None:
+					// 이전 상태에 따라 방향 설정
+					if (_dir == MoveDir.Up)
+					{
+						_animator.Play("IDLE_BACK");
+						transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+					}
+					else if (_dir == MoveDir.Down)
+					{
+						_animator.Play("IDLE_FRONT");
+						transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+					}
+					else if (_dir == MoveDir.Left)
+					{
+						_animator.Play("IDLE_RIGHT");
+						transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+					}
+					else
+					{
+						_animator.Play("IDLE_RIGHT");
+						transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+					}
+					break;
+			}
+
+			_dir = value;
+		}
+	}
+	
     void Start()
     {
+	    _animator = GetComponent<Animator>();
+	    
 	    // 0.5f 는 중심점 
 	    Vector3 pos = _grid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
 	    transform.position = pos;
