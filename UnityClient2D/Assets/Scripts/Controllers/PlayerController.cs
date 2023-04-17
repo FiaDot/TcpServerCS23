@@ -5,7 +5,7 @@ using static Define;
 public class PlayerController : MonoBehaviour
 {
 	// TODO : temp
-	public Grid _grid;
+	// public Grid _grid;
 
 	// grid에서 좌표
 	private Vector3Int _cellPos = Vector3Int.zero;
@@ -76,7 +76,8 @@ public class PlayerController : MonoBehaviour
 	    _animator = GetComponent<Animator>();
 	    
 	    // 0.5f 는 중심점 
-	    Vector3 pos = _grid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
+	    Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
+	    // Vector3 pos = _grid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
 	    transform.position = pos;
     }
     
@@ -87,13 +88,19 @@ public class PlayerController : MonoBehaviour
 	    UpdatePosition();
     }
 
+    void LateUpdate()
+	{
+		Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+	}
+
+        
     // 실제 좌표 업데이트 
     void UpdatePosition()
     {
 	    if (!_isMoving)
 		    return;
 
-	    Vector3 dest = _grid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
+	    Vector3 dest = Managers.Map.CurrentGrid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
 	    Vector3 moveDir = dest - transform.position;
 
 	    float dist = moveDir.magnitude;
@@ -114,31 +121,32 @@ public class PlayerController : MonoBehaviour
     
     void UpdateIsMoving()
     {
-	    if (_isMoving)
+	    if (_isMoving || _dir == MoveDir.None)
 		    return;
 	    
-	    switch ( Dir )
-	    {
-	     case MoveDir.Up:
-		     _cellPos += Vector3Int.up;
-		     _isMoving = true;
-		     break;
-	     
-	     case MoveDir.Down:
-		     _cellPos += Vector3Int.down;
-		     _isMoving = true;
-		     break;
-	     
-	     case MoveDir.Left:
-		     _cellPos += Vector3Int.left;
-		     _isMoving = true;
-		     break;
-	     
-	     case MoveDir.Right:
-		     _cellPos += Vector3Int.right;
-		     _isMoving = true;
-		     break;
-	    }    
+		Vector3Int destPos = _cellPos;
+
+		switch (_dir)
+		{
+			case MoveDir.Up:
+				destPos += Vector3Int.up;
+				break;
+			case MoveDir.Down:
+				destPos += Vector3Int.down;
+				break;
+			case MoveDir.Left:
+				destPos += Vector3Int.left;
+				break;
+			case MoveDir.Right:
+				destPos += Vector3Int.right;
+				break;
+		}
+
+		if (Managers.Map.CanGo(destPos))
+		{
+			_cellPos = destPos;
+			_isMoving = true;
+		}
     }
     
     // 키입력 방향 설정
