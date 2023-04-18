@@ -4,3 +4,9 @@ FILENAME="Protocol"
 
 /bin/cp -f $FILENAME.cs ../Server/$FILENAME.cs
 /bin/cp -f $FILENAME.cs ../Client/$FILENAME.cs
+
+GENERATOR_PATH="../PacketGenerator/bin"
+$GENERATOR_PATH/PacketGenerator
+/bin/cp -f $GENERATOR_PATH/ClientPacketManager.cs ../../UnityClient2D/Assets/Scripts/Packet/ClientPacketManager.cs
+ /bin/cp -f $GENERATOR_PATH/ServerPacketManager.cs ../../Server/ServerPacketManager.cs
+ 
