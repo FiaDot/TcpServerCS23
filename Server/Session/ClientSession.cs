@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using ServerCore;
 using System.Net;
 using Google.Protobuf;
@@ -34,6 +35,7 @@ namespace Server
             // write encoded
             Array.Copy(message.ToByteArray(), 0, sendBuffer, 4, size);
 
+            Console.WriteLine($"< {msgId} ");
             Send(new ArraySegment<byte>(sendBuffer));
         }
 
@@ -91,9 +93,10 @@ namespace Server
 
         public override void OnDisconnected(EndPoint endPoint)
         {
-            Console.WriteLine($"| OnDisconnected : ${endPoint}");
+	        RoomManager.Instance.Find(1).LeaveGame(MyPlayer.Info.PlayerId);
+            SessionManager.Instance.Remove(this);
             
-            RoomManager.Instance.Find(1).LeaveGame(MyPlayer.Info.PlayerId);
+            Console.WriteLine($"| OnDisconnected : ${endPoint}");
         }
 
         //public override int OnRecv(ArraySegment<byte> buffer)
@@ -116,7 +119,7 @@ namespace Server
 
         public override void OnSend(int numOfBytes)
         {
-            Console.WriteLine($"< Send Transferred {numOfBytes} bytes ");
+            // Console.WriteLine($"< Send Transferred {numOfBytes} bytes ");
         }
     }
 

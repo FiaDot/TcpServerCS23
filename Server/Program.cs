@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server;
+using Server.Game;
 
 namespace ServerCore;
 
@@ -11,6 +12,11 @@ class Program
 {
     static Listener _listener = new Listener();
 
+    static void FlushRoom()
+    {
+        JobTimer.Instance.Push(FlushRoom, 250);
+    }
+    
     static void Main(string[] args)
     {
         // PacketManager.Instance.Register();
@@ -34,6 +40,11 @@ class Program
         //
         //
         // Console.WriteLine($"time={decode.Time}");
+        
+        
+        
+        
+        RoomManager.Instance.Add();
         
         Console.WriteLine("Starting Server...");
 
@@ -72,15 +83,14 @@ class Program
         //     Console.WriteLine(ip.ToString());
         // }
         
-        
         _listener.Init(endPoint, () => { return new ClientSession(); });
 
-        
         Console.WriteLine($"Listening... BIND {localAddresses[1]}:{port}");
 
+        JobTimer.Instance.Push(FlushRoom);
         while (true)
         {
-            ;
+            JobTimer.Instance.Flush();
         }      
     }
 }

@@ -4,7 +4,7 @@ using static Define;
 
 public class PlayerController : CreatureController
 {
-	private Coroutine _coSkill;
+	protected Coroutine _coSkill;
 	private bool _isRangeSkill = false;
 	
 	
@@ -89,50 +89,9 @@ public class PlayerController : CreatureController
 
 	protected override void UpdateController()
 	{
-		switch (State)
-		{
-			case CreatureState.Idle:
-				GetDirInput();
-				break;
-			case CreatureState.Moving:
-				GetDirInput();
-				break;
-		}
-		
 		base.UpdateController();
 	}
 
-	void LateUpdate()
-	{
-		Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-	}
-	
-	
-
-	// 키보드 입력
-	void GetDirInput()
-	{
-		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-		{
-			Dir = MoveDir.Up;
-		}
-		else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-		{
-			Dir = MoveDir.Down;
-		}
-		else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-		{
-			Dir = MoveDir.Left;
-		}
-		else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-		{
-			Dir = MoveDir.Right;
-		}
-		else
-		{
-			Dir = MoveDir.None;
-		}
-	}
 	
 	// void GetIdleInput()
 	// {
@@ -144,7 +103,6 @@ public class PlayerController : CreatureController
 	// 	}
 	// }
 	
-	
 	protected override void UpdateIdle()
 	{
 		// 이동 상태로 갈지 확인
@@ -152,14 +110,6 @@ public class PlayerController : CreatureController
 		{
 			State = CreatureState.Moving;
 			return;
-		}
-
-		// 스킬 상태로 갈지 확인
-		if (Input.GetKey(KeyCode.Space))
-		{
-			State = CreatureState.Skill;
-			//_coSkill = StartCoroutine("CoStartPunch");
-			_coSkill = StartCoroutine("CoStartShootArrow");
 		}
 	}
 
