@@ -76,7 +76,7 @@ class Program
         _listener.Init(endPoint, () => { return new ClientSession(); });
 
         
-        Console.WriteLine($"Listening...${localAddresses[1]}:{port}");
+        Console.WriteLine($"Listening... BIND {localAddresses[1]}:{port}");
 
         while (true)
         {

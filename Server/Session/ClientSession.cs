@@ -3,17 +3,21 @@ using ServerCore;
 using System.Net;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.Game;
 
 namespace Server
 {
-    class Packet
-    {
-        public ushort size;
-        public ushort packetId;
-    }
+    // class Packet
+    // {
+    //     public ushort size;
+    //     public ushort packetId;
+    // }
 
-    class ClientSession : PacketSession
+    public class ClientSession : PacketSession
     {
+        public Player MyPlayer { get; set; }
+		public int SessionId { get; set; }
+		
         public void Send(IMessage message)
         {
             string messageName = message.Descriptor.Name.Replace("_", string.Empty);
@@ -68,16 +72,28 @@ namespace Server
             // Thread.Sleep(5000);
             // Disconnect();
             
-            S_Chat chat = new S_Chat()
+            // S_Chat chat = new S_Chat()
+			// {
+			// 	Context = "안녕하세요"
+			// };
+			// Send(chat);
+            
+            MyPlayer = PlayerManager.Instance.Add();
 			{
-				Context = "안녕하세요"
-			};
-			Send(chat);
+				MyPlayer.Info.Name = $"Player_{MyPlayer.Info.PlayerId}";
+				MyPlayer.Info.PosX = 0;
+				MyPlayer.Info.PosY = 0;
+				MyPlayer.Session = this;
+			}
+
+			RoomManager.Instance.Find(1).EnterGame(MyPlayer);
         }
 
         public override void OnDisconnected(EndPoint endPoint)
         {
             Console.WriteLine($"| OnDisconnected : ${endPoint}");
+            
+            RoomManager.Instance.Find(1).LeaveGame(MyPlayer.Info.PlayerId);
         }
 
         //public override int OnRecv(ArraySegment<byte> buffer)
@@ -100,7 +116,7 @@ namespace Server
 
         public override void OnSend(int numOfBytes)
         {
-            Console.WriteLine($"< Send Transffered {numOfBytes} bytes ");
+            Console.WriteLine($"< Send Transferred {numOfBytes} bytes ");
         }
     }
 
