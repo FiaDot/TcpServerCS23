@@ -25,25 +25,28 @@ public class PlayerController : CreatureController
 	// 키보드 입력
 	void GetDirInput()
 	{
-		if (Input.GetKey(KeyCode.W))
+		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
 		{
 			Dir = MoveDir.Up;
 		}
-		else if (Input.GetKey(KeyCode.S))
+		else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
 		{
 			Dir = MoveDir.Down;
 		}
-		else if (Input.GetKey(KeyCode.A))
+		else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
 		{
 			Dir = MoveDir.Left;
 		}
-		else if (Input.GetKey(KeyCode.D))
+		else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
 		{
 			Dir = MoveDir.Right;
 		}
 		else
 		{
 			Dir = MoveDir.None;
+
+			if (Input.GetKey(KeyCode.Space))
+				State = CreatureState.Skill;
 		}
 	}
 }
