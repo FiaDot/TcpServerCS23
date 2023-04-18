@@ -8,6 +8,10 @@ public class MonsterController : CreatureController
 	protected override void Init()
 	{
 		base.Init();
+
+		// 초기화 후 설정
+		State = CreatureState.Idle;
+		Dir = MoveDir.None;
 	}
 
 	protected override void UpdateController()
