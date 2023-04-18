@@ -147,11 +147,14 @@ public class PlayerController : CreatureController
 	
 	IEnumerator CoStartPunch()
 	{
-		// 데미지 처리
-		GameObject target = Managers.Object.Find(GetFrontCellPos());
-		if ( target )
+		// 피격 판정
+		GameObject go = Managers.Object.Find(GetFrontCellPos());
+		if ( go )
 		{
-			print(target.name);
+			CreatureController cc = go.GetComponent<CreatureController>();
+			if (cc != null)
+				cc.OnDamaged();
+			// print(target.name);
 		}
 		
 		_isRangeSkill = false;

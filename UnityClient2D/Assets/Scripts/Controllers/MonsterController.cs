@@ -44,4 +44,17 @@ public class MonsterController : CreatureController
 			Dir = MoveDir.None;
 		}
 	}
+
+	public override void OnDamaged()
+	{
+		GameObject effect = Managers.Resource.Instantiate("Effect/DieEffect");
+		effect.transform.position = gameObject.transform.position;
+		effect.GetComponent<Animator>().Play("START");
+		GameObject.Destroy(effect, 0.5f); // TODO : pool 이라면 이렇게 하면 안됨
+
+		// 몬스터 삭제!
+		Managers.Object.Remove(gameObject);
+		Managers.Resource.Destroy(gameObject);
+	}
+
 }
