@@ -15,24 +15,24 @@ class Program
         // PacketManager.Instance.Register();
 
 
-        // serialize 
-        S_Ping encode = new S_Ping()
-        {
-            Time = 1234,
-        };
-
-        int size = encode.CalculateSize();
-        byte[] sendBuffer = encode.ToByteArray();
-
-        // MsgId.SPing
-
-        // deserialize
-
-        S_Ping decode = new S_Ping();
-        decode.MergeFrom(sendBuffer);
-
-
-        Console.WriteLine($"time={decode.Time}");
+        // // serialize 
+        // S_Ping encode = new S_Ping()
+        // {
+        //     Time = 1234,
+        // };
+        //
+        // int size = encode.CalculateSize();
+        // byte[] sendBuffer = encode.ToByteArray();
+        //
+        // // MsgId.SPing
+        //
+        // // deserialize
+        //
+        // S_Ping decode = new S_Ping();
+        // decode.MergeFrom(sendBuffer);
+        //
+        //
+        // Console.WriteLine($"time={decode.Time}");
         
         Console.WriteLine("Starting Server...");
 

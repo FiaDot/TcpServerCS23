@@ -25,9 +25,7 @@
   <ItemGroup>
     <None Include="Addressbook.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' " />
     <Compile Remove="ClientPacketManager.cs" />
-    <None Include="ClientPacketManager.cs" />
     <Compile Remove="ServerPacketManager.cs" />
-    <None Include="ServerPacketManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.12.3" />
