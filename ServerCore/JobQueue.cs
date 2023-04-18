@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
 namespace ServerCore
 {
 	public interface IJobQueue
@@ -10,27 +13,46 @@ namespace ServerCore
 	{
 		Queue<Action> _jobQueue = new Queue<Action>();
 		object _lock = new object();
+		bool _flush = false;
 
-        public void Push(Action job)
-        {			
-			lock(_lock)
+		public void Push(Action job)
+		{
+			bool flush = false;
+
+			lock (_lock)
 			{
 				_jobQueue.Enqueue(job);
+				if (_flush == false)
+					flush = _flush = true;
 			}
-        }
 
-		Action? Pop()
+			if (flush)
+				Flush();
+		}
+
+		void Flush()
 		{
-			lock(_lock)
+			while (true)
 			{
-				if ( _jobQueue.Count == 0 )
+				Action action = Pop();
+				if (action == null)
+					return;
+
+				action.Invoke();
+			}
+		}
+
+		Action Pop()
+		{
+			lock (_lock)
+			{
+				if (_jobQueue.Count == 0)
 				{
+					_flush = false;
 					return null;
 				}
-
 				return _jobQueue.Dequeue();
 			}
 		}
-    }
+	}
 }
-
