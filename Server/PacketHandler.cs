@@ -14,6 +14,14 @@ namespace Server
 			
 			Console.WriteLine($"SPing: Time={decode.Time}");
 		}		
+		
+		public static void C_ChatHandler(PacketSession session, IMessage packet)
+		{
+			// S_Ping decode = packet as S_Ping;
+			// // ClientSession serverSession = session as ClientSession;
+			//
+			// Console.WriteLine($"SPing: Time={decode.Time}");
+		}
 	}
 }
 

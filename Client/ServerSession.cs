@@ -56,10 +56,10 @@ namespace Client
             //    Send(sendBuff);
             //}
 
-            S_Ping encode = new S_Ping()
-            {
-                Time = 1234,
-            };
+            // S_Ping encode = new S_Ping()
+            // {
+            //     Time = 1234,
+            // };
 
 
             //int size = encode.CalculateSize();
@@ -75,6 +75,8 @@ namespace Client
 
             //Send(new ArraySegment<byte>(sendBuffer));
 
+            C_Chat encode = new C_Chat();
+            encode.Msg = "test";
             Send(encode);
         }
 

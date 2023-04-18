@@ -403,3 +403,5 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+Protocol/ClientPacketManager.cs
+Protocol/ServerPacketManager.cs
