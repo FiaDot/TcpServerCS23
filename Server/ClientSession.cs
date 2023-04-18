@@ -65,8 +65,14 @@ namespace Server
             //Send(sendBuff);
 
             // 1초 대기 후 접속 끊기
-            Thread.Sleep(5000);
-            Disconnect();
+            // Thread.Sleep(5000);
+            // Disconnect();
+            
+            S_Chat chat = new S_Chat()
+			{
+				Context = "안녕하세요"
+			};
+			Send(chat);
         }
 
         public override void OnDisconnected(EndPoint endPoint)
