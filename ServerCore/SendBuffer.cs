@@ -1,8 +1,10 @@
 ﻿using System;
 namespace ServerCore
 {
-	// NOTE : 어떤 세션에서 SendBuffer를 다 전송못하고 남아 있다면 버퍼가 남아있는 버그가 있음. 그래서 사용안함 ;;
+	// NOTE : 어떤 세션에서 SendBuffer를 다 전송못하고 남아 있다면 버퍼가 남아있는 버그가 있음.
+	// 그래서 프로토콜 버퍼 대체 후 사용안함
 	
+	[Obsolete]
 	// TLS 쓰기때문에 lock 불필요
 	public class SendBufferHelper
 	{
@@ -36,7 +38,8 @@ namespace ServerCore
     // case1. T1 - Send - Enqueue - RegisterSend
     // case2. T1 - Send - Enqueue
 	//		  T2				  - RegissterSend				
-    public class SendBuffer
+    [Obsolete]
+	public class SendBuffer
 	{
 		byte[] _buffer;
 		int _usedSize = 0;
