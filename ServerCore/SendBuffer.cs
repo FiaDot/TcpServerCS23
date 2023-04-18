@@ -1,6 +1,8 @@
 ﻿using System;
 namespace ServerCore
 {
+	// NOTE : 어떤 세션에서 SendBuffer를 다 전송못하고 남아 있다면 버퍼가 남아있는 버그가 있음. 그래서 사용안함 ;;
+	
 	// TLS 쓰기때문에 lock 불필요
 	public class SendBufferHelper
 	{
