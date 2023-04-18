@@ -12,11 +12,12 @@ class PacketHandler
 		S_Chat chatPacket = packet as S_Chat;
 		ServerSession serverSession = session as ServerSession;
 
-		Debug.Log(chatPacket.Context);
-		
+		Debug.Log($"> S_ChatHandler : {chatPacket.Context}");
+
 		C_Chat encode = new C_Chat();
         encode.Context = "test";
         serverSession.Send(encode);
+        Debug.Log($"< C_Chat : {encode.Context}");
 	}
 
 	public static void S_EnterGameHandler(PacketSession session, IMessage packet)
