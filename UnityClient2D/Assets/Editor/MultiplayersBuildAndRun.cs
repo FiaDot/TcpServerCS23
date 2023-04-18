@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,13 @@ public class MultiplayersBuildAndRun
 	// 	}
 	// }
 
+	[MenuItem("Tools/Run Multiplayer/1 Player")]
+	static void PerformOsxBuild1()
+	{
+		PerformOSXBuild(1);
+	}
+
+	
 	[MenuItem("Tools/Run Multiplayer/2 Players")]
 	static void PerformOsxBuild2()
 	{
@@ -61,8 +69,11 @@ public class MultiplayersBuildAndRun
 
 		for (int i = 1; i <= playerCount; i++)
 		{
-			BuildPipeline.BuildPlayer(GetScenePaths(),
-				"Builds/OSX/" + GetProjectName() + i.ToString() + "/" + GetProjectName() + i.ToString(),
+			string folder = GetProjectName() + i.ToString();
+			string path = Path.Combine("Builds", "OSX", folder, folder + ".app");
+			
+			BuildPipeline.BuildPlayer(GetScenePaths(), 
+				path,
 				BuildTarget.StandaloneOSX, BuildOptions.AutoRunPlayer);
 		}
 	}
@@ -81,6 +92,7 @@ public class MultiplayersBuildAndRun
 		for (int i = 0; i < scenes.Length; i++)
 		{
 			scenes[i] = EditorBuildSettings.scenes[i].path;
+			// TODO : 삭제된 씬이 목록에 있으면 에러남 ㅡㅡ;
 		}
 
 		return scenes;
