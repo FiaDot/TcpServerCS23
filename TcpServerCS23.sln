@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerCore", "ServerCore\Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol", "Protocol\Protocol.csproj", "{E8A49FA1-52CB-4AA2-A1C3-94999BE0390F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketGenerator", "PacketGenerator\PacketGenerator.csproj", "{70ECE106-8B11-43D3-B4EB-F3F7BB3D5F28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E8A49FA1-52CB-4AA2-A1C3-94999BE0390F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8A49FA1-52CB-4AA2-A1C3-94999BE0390F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8A49FA1-52CB-4AA2-A1C3-94999BE0390F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70ECE106-8B11-43D3-B4EB-F3F7BB3D5F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70ECE106-8B11-43D3-B4EB-F3F7BB3D5F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70ECE106-8B11-43D3-B4EB-F3F7BB3D5F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70ECE106-8B11-43D3-B4EB-F3F7BB3D5F28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
