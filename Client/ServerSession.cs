@@ -76,7 +76,7 @@ namespace Client
             //Send(new ArraySegment<byte>(sendBuffer));
 
             C_Chat encode = new C_Chat();
-            encode.Msg = "test";
+            encode.Context = "test";
             Send(encode);
         }
 
