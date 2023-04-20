@@ -6,7 +6,7 @@ using static Define;
 public class PlayerController : CreatureController
 {
 	protected Coroutine _coSkill;
-	private bool _isRangeSkill = false;
+	private bool _rangeSkill = false;
 	
 	
 	protected override void UpdateAnimation()
@@ -60,19 +60,19 @@ public class PlayerController : CreatureController
 			switch (_lastDir)
 			{
 				case MoveDir.Up:
-					_animator.Play(_isRangeSkill ? "ATTACK_WEAPON_BACK" : "ATTACK_BACK");
+					_animator.Play(_rangeSkill ? "ATTACK_WEAPON_BACK" : "ATTACK_BACK");
 					_sprite.flipX = false;
 					break;
 				case MoveDir.Down:
-					_animator.Play(_isRangeSkill ? "ATTACK_WEAPON_FRONT" : "ATTACK_FRONT");
+					_animator.Play(_rangeSkill ? "ATTACK_WEAPON_FRONT" : "ATTACK_FRONT");
 					_sprite.flipX = false;
 					break;
 				case MoveDir.Left:
-					_animator.Play(_isRangeSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
+					_animator.Play(_rangeSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
 					_sprite.flipX = true;
 					break;
 				case MoveDir.Right:
-					_animator.Play(_isRangeSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
+					_animator.Play(_rangeSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
 					_sprite.flipX = false;
 					break;
 			}
@@ -128,40 +128,68 @@ public class PlayerController : CreatureController
 
 	}
 
+	// IEnumerator CoStartPunch()
+	// {
+	// 	// 피격 판정
+	// 	GameObject go = Managers.Object.Find(GetFrontCellPos());
+	// 	if ( go )
+	// 	{
+	// 		CreatureController cc = go.GetComponent<CreatureController>();
+	// 		if (cc != null)
+	// 			cc.OnDamaged();
+	// 		// print(target.name);
+	// 	}
+	// 	
+	// 	_isRangeSkill = false;
+	// 	
+	// 	// 대기시간
+	// 	yield return new WaitForSeconds(0.5f);
+	// 	State = CreatureState.Idle;
+	// 	_coSkill = null;
+	// }
+	//
+	// IEnumerator CoStartShootArrow()
+	// {
+	// 	GameObject go = Managers.Resource.Instantiate("Creature/Arrow");
+	// 	ArrowController ac = go.GetComponent<ArrowController>();
+	// 	ac.Dir = _lastDir;
+	// 	ac.CellPos = CellPos;
+	// 	
+	// 	_isRangeSkill = true;
+	// 	
+	// 	// 대기시간
+	// 	yield return new WaitForSeconds(0.3f);
+	// 	State = CreatureState.Idle;
+	// 	_coSkill = null;
+	// }
+	
 	IEnumerator CoStartPunch()
 	{
-		// 피격 판정
-		GameObject go = Managers.Object.Find(GetFrontCellPos());
-		if ( go )
-		{
-			CreatureController cc = go.GetComponent<CreatureController>();
-			if (cc != null)
-				cc.OnDamaged();
-			// print(target.name);
-		}
-		
-		_isRangeSkill = false;
-		
-		// 대기시간
+		// 대기 시간
+		_rangeSkill = false;
+		State = CreatureState.Skill;
 		yield return new WaitForSeconds(0.5f);
 		State = CreatureState.Idle;
 		_coSkill = null;
+		CheckUpdatedFlag();
 	}
-	
+
 	IEnumerator CoStartShootArrow()
 	{
 		GameObject go = Managers.Resource.Instantiate("Creature/Arrow");
 		ArrowController ac = go.GetComponent<ArrowController>();
 		ac.Dir = _lastDir;
 		ac.CellPos = CellPos;
-		
-		_isRangeSkill = true;
-		
-		// 대기시간
+
+		// 대기 시간
+		_rangeSkill = true;
 		yield return new WaitForSeconds(0.3f);
 		State = CreatureState.Idle;
 		_coSkill = null;
 	}
-	
-	
+
+	public override void OnDamaged()
+	{
+		Debug.Log("Player HIT !");
+	}
 }
