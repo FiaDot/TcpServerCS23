@@ -26,7 +26,7 @@ public class PacketHandler
 			return;
 		if (clientSession.MyPlayer.Room == null)
 			return;
-
+		
 		// 서버에서 먼저 좌표이동
 		PlayerInfo info = clientSession.MyPlayer.Info;
 		info.PosInfo = recvPacket.PosInfo;
