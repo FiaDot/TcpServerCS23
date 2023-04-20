@@ -10,9 +10,14 @@ namespace Server.Game
 	{
 		object _lock = new object();
 		public int RoomId { get; set; }
-
 		List<Player> _players = new List<Player>();
-
+		Map _map = new Map();
+		
+		public void Init(int mapId)
+		{
+			_map.LoadMap(mapId);
+		}
+		
 		public void EnterGame(Player newPlayer)
 		{
 			if (newPlayer == null)
@@ -90,10 +95,20 @@ namespace Server.Game
 			lock (_lock)
 			{
 				// TODO : 검증
+				PositionInfo movePosInfo = movePacket.PosInfo;
+				PlayerInfo info = player.Info;
+
+				// 다른 좌표로 이동할 경우, 갈 수 있는지 체크
+				if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
+				{
+					if (_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
+						return;
+				}
 
 				// 일단 서버에서 좌표 이동
-				PlayerInfo info = player.Info;
-				info.PosInfo = movePacket.PosInfo;
+				info.PosInfo.State = movePosInfo.State;
+				info.PosInfo.MoveDir = movePosInfo.MoveDir;
+				_map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
 
 				// 다른 플레이어한테도 알려준다
 				S_Move resMovePacket = new S_Move();
@@ -126,6 +141,12 @@ namespace Server.Game
 				Broadcast(skill);
 
 				// TODO : 데미지 판정
+				Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+				Player target = _map.Find(skillPos);
+				if (target != null)
+				{
+					Console.WriteLine("Hit Player !");
+				}
 			}
 		}
 		

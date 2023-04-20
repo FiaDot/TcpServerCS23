@@ -44,7 +44,7 @@ class Program
         
         
         
-        RoomManager.Instance.Add();
+        RoomManager.Instance.Add(1);
         
         Console.WriteLine("Starting Server...");
 
