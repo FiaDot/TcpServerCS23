@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Google.Protobuf;
 
 namespace Server.Game
 {
@@ -76,6 +77,17 @@ namespace Server.Game
 						if (player != p)
 							p.Session.Send(despawnPacket);
 					}
+				}
+			}
+		}
+
+		public void Broadcast(IMessage packet)
+		{
+			lock (_lock)
+			{
+				foreach (Player p in _players)
+				{
+					p.Session.Send(packet);
 				}
 			}
 		}
