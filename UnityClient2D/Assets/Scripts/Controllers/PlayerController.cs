@@ -113,6 +113,20 @@ public class PlayerController : CreatureController
 			return;
 		}
 	}
+	
+	
+	public void UseSkill(int skillId)
+	{
+		if (skillId == 1)
+		{
+			_coSkill = StartCoroutine("CoStartPunch");
+		}
+	}
+
+	protected virtual void CheckUpdatedFlag()
+	{
+
+	}
 
 	IEnumerator CoStartPunch()
 	{

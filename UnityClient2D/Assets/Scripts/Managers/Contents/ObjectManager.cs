@@ -22,6 +22,7 @@ public class ObjectManager
 			MyPlayer.Id = info.PlayerId;
 			// MyPlayer.CellPos = new Vector3Int(info.PosX, info.PosY, 0);
 			MyPlayer.PosInfo = info.PosInfo;
+			MyPlayer.SyncPos();
 		}
 		else
 		{
@@ -32,7 +33,8 @@ public class ObjectManager
 			PlayerController pc = go.GetComponent<PlayerController>();
 			pc.Id = info.PlayerId;
 			// pc.CellPos = new Vector3Int(info.PosX, info.PosY, 0);
-			MyPlayer.PosInfo = info.PosInfo;
+			pc.PosInfo = info.PosInfo;
+			pc.SyncPos();
 		}
 	}
 

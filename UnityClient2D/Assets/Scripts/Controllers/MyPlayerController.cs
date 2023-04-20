@@ -58,6 +58,24 @@ public class MyPlayerController : PlayerController
 		}
 	}
 	
+	// protected override void UpdateIdle()
+	// {
+	// 	// 이동 상태로 갈지 확인
+	// 	if (Dir != MoveDir.None)
+	// 	{
+	// 		State = CreatureState.Moving;
+	// 		return;
+	// 	}
+	//
+	// 	// 스킬 상태로 갈지 확인
+	// 	if (Input.GetKey(KeyCode.Space))
+	// 	{
+	// 		State = CreatureState.Skill;
+	// 		//_coSkill = StartCoroutine("CoStartPunch");
+	// 		_coSkill = StartCoroutine("CoStartShootArrow");
+	// 	}
+	// }
+
 	protected override void UpdateIdle()
 	{
 		// 이동 상태로 갈지 확인
@@ -67,15 +85,24 @@ public class MyPlayerController : PlayerController
 			return;
 		}
 
-		// 스킬 상태로 갈지 확인
-		if (Input.GetKey(KeyCode.Space))
+		if (_coSkillCooltime == null && Input.GetKey(KeyCode.Space))
 		{
-			State = CreatureState.Skill;
-			//_coSkill = StartCoroutine("CoStartPunch");
-			_coSkill = StartCoroutine("CoStartShootArrow");
+			Debug.Log("Skill !");
+
+			C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+			skill.Info.SkillId = 1;
+			Managers.Network.Send(skill);
+
+			_coSkillCooltime = StartCoroutine("CoInputCooltime", 0.2f);
 		}
 	}
 
+	Coroutine _coSkillCooltime;
+	IEnumerator CoInputCooltime(float time)
+	{
+		yield return new WaitForSeconds(time);
+		_coSkillCooltime = null;
+	}
 
 	protected override void MoveToNextPos()
 	{
