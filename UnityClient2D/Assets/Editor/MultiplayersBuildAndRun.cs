@@ -37,12 +37,6 @@ public class MultiplayersBuildAndRun
 	// 	}
 	// }
 
-	[MenuItem("Tools/Run Multiplayer/1 Player")]
-	static void PerformOsxBuild1()
-	{
-		PerformOSXBuild(1);
-	}
-
 	
 	[MenuItem("Tools/Run Multiplayer/2 Players")]
 	static void PerformOsxBuild2()
@@ -61,6 +55,13 @@ public class MultiplayersBuildAndRun
 	{
 		PerformOSXBuild(4);
 	}
+	
+	[MenuItem("Tools/Run Multiplayer/1 Player")]
+	static void PerformOsxBuild1()
+	{
+		PerformOSXBuild(1);
+	}
+
 
 	static void PerformOSXBuild(int playerCount)
 	{

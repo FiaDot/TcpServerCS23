@@ -65,8 +65,9 @@ class Program
                 Console.WriteLine(ipAddress.ToString());
             }
         }
-        
-        endPoint = new IPEndPoint(localAddresses[0], port);
+
+        IPAddress localAddr = localAddresses[1];
+        endPoint = new IPEndPoint(localAddr, port);
         
         // IPv6, IPv4 모두 나옴 ㅡㅡ;
         /*
@@ -85,7 +86,7 @@ class Program
         
         _listener.Init(endPoint, () => { return new ClientSession(); });
 
-        Console.WriteLine($"Listening... BIND {localAddresses[0]}:{port}");
+        Console.WriteLine($"Listening... BIND {localAddr}:{port}");
 
         JobTimer.Instance.Push(FlushRoom);
         while (true)
