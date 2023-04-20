@@ -66,7 +66,7 @@ class Program
             }
         }
 
-        IPAddress localAddr = localAddresses[0];
+        IPAddress localAddr = localAddresses[1];
         endPoint = new IPEndPoint(localAddr, port);
         
         // IPv6, IPv4 모두 나옴 ㅡㅡ;

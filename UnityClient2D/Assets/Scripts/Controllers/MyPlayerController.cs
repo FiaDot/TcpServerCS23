@@ -1,24 +1,19 @@
+﻿using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
-using Google.Protobuf.Protocol;
 using UnityEngine;
 using static Define;
 
 public class MyPlayerController : PlayerController
 {
-	// 내가 컨트롤하는 캐릭터에 대한 제어
-	
-    protected override void Init()
-    {
-        base.Init();
-    }
-    
-    void LateUpdate()
+	bool _moveKeyPressed = false;
+
+	protected override void Init()
 	{
-		Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+		base.Init();
 	}
-    
-    protected override void UpdateController()
+
+	protected override void UpdateController()
 	{
 		switch (State)
 		{
@@ -29,57 +24,14 @@ public class MyPlayerController : PlayerController
 				GetDirInput();
 				break;
 		}
-		
+
 		base.UpdateController();
 	}
-
-	// 키보드 입력
-	void GetDirInput()
-	{
-		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-		{
-			Dir = MoveDir.Up;
-		}
-		else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-		{
-			Dir = MoveDir.Down;
-		}
-		else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-		{
-			Dir = MoveDir.Left;
-		}
-		else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-		{
-			Dir = MoveDir.Right;
-		}
-		else
-		{
-			Dir = MoveDir.None;
-		}
-	}
-	
-	// protected override void UpdateIdle()
-	// {
-	// 	// 이동 상태로 갈지 확인
-	// 	if (Dir != MoveDir.None)
-	// 	{
-	// 		State = CreatureState.Moving;
-	// 		return;
-	// 	}
-	//
-	// 	// 스킬 상태로 갈지 확인
-	// 	if (Input.GetKey(KeyCode.Space))
-	// 	{
-	// 		State = CreatureState.Skill;
-	// 		//_coSkill = StartCoroutine("CoStartPunch");
-	// 		_coSkill = StartCoroutine("CoStartShootArrow");
-	// 	}
-	// }
 
 	protected override void UpdateIdle()
 	{
 		// 이동 상태로 갈지 확인
-		if (Dir != MoveDir.None)
+		if (_moveKeyPressed)
 		{
 			State = CreatureState.Moving;
 			return;
@@ -104,9 +56,41 @@ public class MyPlayerController : PlayerController
 		_coSkillCooltime = null;
 	}
 
+	void LateUpdate()
+	{
+		Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+	}
+
+	// 키보드 입력
+	void GetDirInput()
+	{
+		_moveKeyPressed = true;
+
+		if (Input.GetKey(KeyCode.W))
+		{
+			Dir = MoveDir.Up;
+		}
+		else if (Input.GetKey(KeyCode.S))
+		{
+			Dir = MoveDir.Down;
+		}
+		else if (Input.GetKey(KeyCode.A))
+		{
+			Dir = MoveDir.Left;
+		}
+		else if (Input.GetKey(KeyCode.D))
+		{
+			Dir = MoveDir.Right;
+		}
+		else
+		{
+			_moveKeyPressed = false;
+		}
+	}
+
 	protected override void MoveToNextPos()
 	{
-		if (Dir == MoveDir.None)
+		if (_moveKeyPressed == false)
 		{
 			State = CreatureState.Idle;
 			CheckUpdatedFlag();
@@ -142,13 +126,13 @@ public class MyPlayerController : PlayerController
 		CheckUpdatedFlag();
 	}
 
-	void CheckUpdatedFlag()
+	protected override void CheckUpdatedFlag()
 	{
-		if ( _updated )
+		if (_updated)
 		{
-			C_Move sendPacket = new C_Move();
-			sendPacket.PosInfo = PosInfo;
-			Managers.Network.Send(sendPacket);
+			C_Move movePacket = new C_Move();
+			movePacket.PosInfo = PosInfo;
+			Managers.Network.Send(movePacket);
 			_updated = false;
 		}
 	}
