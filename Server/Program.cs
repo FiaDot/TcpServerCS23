@@ -62,11 +62,11 @@ class Program
             if (ipAddress.AddressFamily == AddressFamily.InterNetwork) // filter out ipv4
             {
                 localAddresses.Add(ipAddress);
-                // Console.WriteLine(ipAddress.ToString());
+                Console.WriteLine(ipAddress.ToString());
             }
         }
-
-        endPoint = new IPEndPoint(localAddresses[1], port);
+        
+        endPoint = new IPEndPoint(localAddresses[0], port);
         
         // IPv6, IPv4 모두 나옴 ㅡㅡ;
         /*
@@ -85,7 +85,7 @@ class Program
         
         _listener.Init(endPoint, () => { return new ClientSession(); });
 
-        Console.WriteLine($"Listening... BIND {localAddresses[1]}:{port}");
+        Console.WriteLine($"Listening... BIND {localAddresses[0]}:{port}");
 
         JobTimer.Instance.Push(FlushRoom);
         while (true)

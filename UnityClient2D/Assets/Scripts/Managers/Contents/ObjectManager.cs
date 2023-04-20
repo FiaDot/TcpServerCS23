@@ -86,6 +86,13 @@ public class ObjectManager
 		return null;
 	}
 
+	public GameObject FindById(int id)
+	{
+		GameObject go = null;
+		_objects.TryGetValue(id, out go);
+		return go;
+	}
+
 	public void Clear()
 	{
 		_objects.Clear();

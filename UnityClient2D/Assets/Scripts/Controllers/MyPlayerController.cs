@@ -75,5 +75,20 @@ public class MyPlayerController : PlayerController
 			_coSkill = StartCoroutine("CoStartShootArrow");
 		}
 	}
+
+
+	protected override void MoveToNextPos()
+	{
+		CreatureState prevState = State;
+		Vector3Int prevPos = CellPos;
 		
+		base.MoveToNextPos();
+
+		if (State != prevState || CellPos != prevPos)
+		{
+			C_Move sendPacket = new C_Move();
+			sendPacket.PosInfo = PosInfo;
+			Managers.Network.Send(sendPacket);
+		}
+	}
 }

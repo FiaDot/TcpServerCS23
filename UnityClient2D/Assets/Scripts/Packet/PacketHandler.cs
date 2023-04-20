@@ -68,6 +68,16 @@ class PacketHandler
 		ServerSession serverSession = session as ServerSession;
 		
 		Debug.Log($"> S_MoveHandler : {recvPacket.PlayerId}");
+
+		GameObject go = Managers.Object.FindById(recvPacket.PlayerId);
+		if (null == go)
+			return;
+
+		CreatureController cc = go.GetComponent<CreatureController>();
+		if (null == cc)
+			return;
+		
+		cc.PosInfo = recvPacket.PosInfo;
 	}
 	
 }
