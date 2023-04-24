@@ -4,6 +4,7 @@ using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server;
 using Server.Game;
+using Timer = System.Timers.Timer;
 
 namespace ServerCore;
 
@@ -11,10 +12,22 @@ namespace ServerCore;
 class Program
 {
     static Listener _listener = new Listener();
+    //
+    // static void FlushRoom()
+    // {
+    //     JobTimer.Instance.Push(FlushRoom, 250);
+    // }
+    //
 
-    static void FlushRoom()
+    private static List<System.Timers.Timer> _timers = new List<Timer>();
+    static void TickRoom(GameRoom room, int tick = 100)
     {
-        JobTimer.Instance.Push(FlushRoom, 250);
+        var timer = new System.Timers.Timer();
+        timer.Interval = tick;
+        timer.Elapsed += ((o, e ) => { room.Update(); });
+        timer.AutoReset = true;
+        timer.Enabled = true;
+        _timers.Add(timer);
     }
     
     static void Main(string[] args)
@@ -44,7 +57,8 @@ class Program
         
         
         
-        RoomManager.Instance.Add(1);
+        GameRoom room = RoomManager.Instance.Add(1);
+        TickRoom(room, 50);
         
         Console.WriteLine("Starting Server...");
 
@@ -88,13 +102,16 @@ class Program
 
         Console.WriteLine($"Listening... BIND {localAddr}:{port}");
 
-        JobTimer.Instance.Push(FlushRoom);
+        // JobTimer.Instance.Push(FlushRoom);
         
         // JobTimer.Instance.Push(() => Console.WriteLine("250"), 250);
         // JobTimer.Instance.Push(() => Console.WriteLine("500"), 500);
         while (true)
         {
-            JobTimer.Instance.Flush();
+            // JobTimer.Instance.Flush();
+            // GameRoom room = RoomManager.Instance.Find(1);
+            // room.Push(room.Flush);
+            Thread.Sleep(100);
         }      
     }
 }
