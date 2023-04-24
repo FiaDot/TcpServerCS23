@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ServerCore;
+﻿using ServerCore;
 
 namespace Server
 {
@@ -18,7 +15,7 @@ namespace Server
 
 	class JobTimer
 	{
-		PriorityQueue<JobTimerElem> _pq = new PriorityQueue<JobTimerElem>();
+		PriorityQueue<JobTimerElem, int> _pq = new PriorityQueue<JobTimerElem, int>();
 		object _lock = new object();
 
 		public static JobTimer Instance { get; } = new JobTimer();
@@ -31,7 +28,7 @@ namespace Server
 
 			lock (_lock)
 			{
-				_pq.Push(job);
+				_pq.Enqueue(job, job.execTick);
 			}
 		}
 
@@ -52,7 +49,7 @@ namespace Server
 					if (job.execTick > now)
 						break;
 
-					_pq.Pop();
+					_pq.Dequeue();
 				}
 
 				job.action.Invoke();

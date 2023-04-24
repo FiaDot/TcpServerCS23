@@ -1,9 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
 using ServerCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace Server.Game
 {
@@ -171,7 +167,7 @@ namespace Server.Game
 			Pos[,] parent = new Pos[SizeY, SizeX];
 
 			// 오픈리스트에 있는 정보들 중에서, 가장 좋은 후보를 빠르게 뽑아오기 위한 도구
-			PriorityQueue<PQNode> pq = new PriorityQueue<PQNode>();
+			PriorityQueueSimple<PQNode> pq = new PriorityQueueSimple<PQNode>();
 
 			// CellPos -> ArrayPos
 			Pos pos = Cell2Pos(startCellPos);

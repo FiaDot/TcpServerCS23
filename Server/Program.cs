@@ -66,7 +66,7 @@ class Program
             }
         }
 
-        IPAddress localAddr = localAddresses[1];
+        IPAddress localAddr = localAddresses[0];
         endPoint = new IPEndPoint(localAddr, port);
         
         // IPv6, IPv4 모두 나옴 ㅡㅡ;
@@ -89,6 +89,9 @@ class Program
         Console.WriteLine($"Listening... BIND {localAddr}:{port}");
 
         JobTimer.Instance.Push(FlushRoom);
+        
+        // JobTimer.Instance.Push(() => Console.WriteLine("250"), 250);
+        // JobTimer.Instance.Push(() => Console.WriteLine("500"), 500);
         while (true)
         {
             JobTimer.Instance.Flush();
