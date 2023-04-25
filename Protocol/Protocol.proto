@@ -83,11 +83,17 @@ message PlayerInfo {
   PositionInfo posInfo = 3;
 }
 
+message vector3Net {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
 message PositionInfo {
     CreatureState state = 1;
     MoveDir moveDir = 2;
-    int32 posX = 3;
-    int32 posY = 4;
+    vector3Net pos = 3;
+    vector3Net rot = 4;
 }
 
 message SkillInfo {

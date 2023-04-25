@@ -123,9 +123,9 @@ public class PlayerController : CreatureController
 	IEnumerator CoStartShootArrow()
 	{
 		GameObject go = Managers.Resource.Instantiate("Creature/Arrow");
-		ArrowController ac = go.GetComponent<ArrowController>();
-		ac.Dir = Dir;
-		ac.CellPos = CellPos;
+		// ArrowController ac = go.GetComponent<ArrowController>();
+		// ac.Dir = Dir;
+		// ac.CellPos = CellPos;
 
 		// 대기 시간
 		_rangedSkill = true;

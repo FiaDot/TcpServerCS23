@@ -85,8 +85,17 @@ namespace Server
 				MyPlayer.Info.Name = $"Player_{MyPlayer.Info.PlayerId}";
 				MyPlayer.Info.PosInfo.State = CreatureState.Idle;
 				MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
-				MyPlayer.Info.PosInfo.PosX = 0;
-				MyPlayer.Info.PosInfo.PosY = 0;
+
+				MyPlayer.Info.PosInfo.Pos = new vector3Net();
+				MyPlayer.Info.PosInfo.Pos.X = 0.0f;
+				MyPlayer.Info.PosInfo.Pos.Y = 0.0f;
+				MyPlayer.Info.PosInfo.Pos.Z = 0.0f;
+				
+				MyPlayer.Info.PosInfo.Rot = new vector3Net();
+				MyPlayer.Info.PosInfo.Rot.X = 0.0f;
+				MyPlayer.Info.PosInfo.Rot.Y = 0.0f;
+				MyPlayer.Info.PosInfo.Rot.Z = 0.0f;
+				
 				MyPlayer.Session = this;
 			}
 

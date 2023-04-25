@@ -23,32 +23,44 @@ public class CreatureController : MonoBehaviour
 			if (_positionInfo.Equals(value))
 				return;
 
-			CellPos = new Vector3Int(value.PosX, value.PosY, 0);
+			// CellPos = new Vector3(value.Pos);
 			State = value.State;
 			Dir = value.MoveDir;
+			CellPos = new Vector3(value.Pos.X, value.Pos.Y, value.Pos.Z);
+			// Rot = value.Rot;
 		}
 	}
 
 	public void SyncPos()
 	{
-		Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
-		transform.position = destPos;
+		// Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
+		transform.position = CellPos;
 	}
 
-	public Vector3Int CellPos 
+	public Vector3 CellPos 
 	{ 
 		get
 		{
-			return new Vector3Int(PosInfo.PosX, PosInfo.PosY, 0);
+			return new Vector3(PosInfo.Pos.X, PosInfo.Pos.Y, PosInfo.Pos.Z);
+			// return new Vector3Int(PosInfo.PosX, PosInfo.PosY, 0);
 		}
 
 		set
 		{
-			if (PosInfo.PosX == value.x && PosInfo.PosY == value.y)
-				return;
+			// PosInfo.Pos
+			// if (PosInfo.PosX == value.x && PosInfo.PosY == value.y)
+			// 	return;
+			//
+			PosInfo.Pos = new vector3Net();
+			
+			PosInfo.Pos.X = value.x;
+			PosInfo.Pos.Y = value.y;
+			PosInfo.Pos.Z = value.z;
+			// PosInfo.PosX = value.x;
+			// PosInfo.PosY = value.y;
 
-			PosInfo.PosX = value.x;
-			PosInfo.PosY = value.y;
+			PosInfo.Rot = new vector3Net();
+			
 			_updated = true;
 		}
 	}
@@ -96,29 +108,29 @@ public class CreatureController : MonoBehaviour
 		else
 			return MoveDir.Down;
 	}
-
-	public Vector3Int GetFrontCellPos()
-	{
-		Vector3Int cellPos = CellPos;
-
-		switch (Dir)
-		{
-			case MoveDir.Up:
-				cellPos += Vector3Int.up;
-				break;
-			case MoveDir.Down:
-				cellPos += Vector3Int.down;
-				break;
-			case MoveDir.Left:
-				cellPos += Vector3Int.left;
-				break;
-			case MoveDir.Right:
-				cellPos += Vector3Int.right;
-				break;
-		}
-
-		return cellPos;
-	}
+	//
+	// public Vector3Int GetFrontCellPos()
+	// {
+	// 	Vector3Int cellPos = CellPos;
+	//
+	// 	switch (Dir)
+	// 	{
+	// 		case MoveDir.Up:
+	// 			cellPos += Vector3Int.up;
+	// 			break;
+	// 		case MoveDir.Down:
+	// 			cellPos += Vector3Int.down;
+	// 			break;
+	// 		case MoveDir.Left:
+	// 			cellPos += Vector3Int.left;
+	// 			break;
+	// 		case MoveDir.Right:
+	// 			cellPos += Vector3Int.right;
+	// 			break;
+	// 	}
+	//
+	// 	return cellPos;
+	// }
 
 	protected virtual void UpdateAnimation()
 	{
@@ -208,8 +220,8 @@ public class CreatureController : MonoBehaviour
 	{
 		_animator = GetComponent<Animator>();
 		_sprite = GetComponent<SpriteRenderer>();
-		Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
-		transform.position = pos;
+		// Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
+		transform.position = CellPos;
 
 		State = CreatureState.Idle;
 		Dir = MoveDir.Down;
@@ -242,7 +254,7 @@ public class CreatureController : MonoBehaviour
 	// 스르륵 이동하는 것을 처리
 	protected virtual void UpdateMoving()
 	{
-		Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
+		Vector3 destPos = CellPos; // Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
 		Vector3 moveDir = destPos - transform.position;
 
 		// 도착 여부 체크

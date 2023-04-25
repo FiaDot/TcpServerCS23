@@ -10,7 +10,6 @@ namespace Server.Game
 	{
 		public int RoomId { get; set; }
 		List<Player> _players = new List<Player>();
-		Map _map = new Map();
 
 		public void Update()
 		{
@@ -19,7 +18,7 @@ namespace Server.Game
 
 		public void Init(int mapId)
 		{
-			_map.LoadMap(mapId);
+			// _map.LoadMap(mapId);
 		}
 
 		
@@ -98,21 +97,23 @@ namespace Server.Game
 			if (player == null)
 				return;
 
-			// TODO : 검증
 			PositionInfo movePosInfo = movePacket.PosInfo;
 			PlayerInfo info = player.Info;
-
-			// 다른 좌표로 이동할 경우, 갈 수 있는지 체크
-			if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
-			{
-				if (_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
-					return;
-			}
+			
+			// // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
+			// if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
+			// {
+			// 	if (_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
+			// 		return;
+			// }
 
 			// 일단 서버에서 좌표 이동
 			info.PosInfo.State = movePosInfo.State;
 			info.PosInfo.MoveDir = movePosInfo.MoveDir;
-			_map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
+			info.PosInfo.Pos = movePosInfo.Pos;
+			info.PosInfo.Rot = movePosInfo.Rot;
+			
+			// _map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
 
 			// 다른 플레이어한테도 알려준다
 			S_Move resMovePacket = new S_Move();
@@ -124,30 +125,30 @@ namespace Server.Game
 
 		public void HandleSkill(Player player, C_Skill skillPacket)
 		{
-			if (player == null)
-				return;
-
-			PlayerInfo info = player.Info;
-			if (info.PosInfo.State != CreatureState.Idle)
-				return;
-
-			// TODO : 스킬 사용 가능 여부 체크
-
-			// 통과
-			info.PosInfo.State = CreatureState.Skill;
-
-			S_Skill skill = new S_Skill() { Info = new SkillInfo() };
-			skill.PlayerId = info.PlayerId;
-			skill.Info.SkillId = 1;
-			Broadcast(skill);
-
-			// TODO : 데미지 판정
-			Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-			Player target = _map.Find(skillPos);
-			if (target != null)
-			{
-				Console.WriteLine("Hit Player !");
-			}
+			// if (player == null)
+			// 	return;
+			//
+			// PlayerInfo info = player.Info;
+			// if (info.PosInfo.State != CreatureState.Idle)
+			// 	return;
+			//
+			// // TODO : 스킬 사용 가능 여부 체크
+			//
+			// // 통과
+			// info.PosInfo.State = CreatureState.Skill;
+			//
+			// S_Skill skill = new S_Skill() { Info = new SkillInfo() };
+			// skill.PlayerId = info.PlayerId;
+			// skill.Info.SkillId = 1;
+			// Broadcast(skill);
+			//
+			// // TODO : 데미지 판정
+			// Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+			// Player target = _map.Find(skillPos);
+			// if (target != null)
+			// {
+			// 	Console.WriteLine("Hit Player !");
+			// }
 		}
 		
 		public void Broadcast(IMessage packet)

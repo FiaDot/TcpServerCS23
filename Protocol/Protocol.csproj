@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -23,11 +24,13 @@
     <Compile Remove="Addressbook.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Addressbook.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' " />
     <Compile Remove="ClientPacketManager.cs" />
     <Compile Remove="ServerPacketManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.12.3" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="./build-apple-silicon.sh" />
+  </Target>
 </Project>
