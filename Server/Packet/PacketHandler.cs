@@ -87,8 +87,9 @@ public class PacketHandler
 	
 	public static void C_RttHandler(PacketSession session, IMessage packet)
 	{
-		ClientSession clientSession = session as ClientSession;
-		clientSession.Send(packet);
+		// C_Rtt recv = packet as C_Rtt;
+		// ClientSession clientSession = session as ClientSession;
+		// clientSession.Send(packet);
 	}
 }
 
