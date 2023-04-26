@@ -116,7 +116,9 @@ class PacketHandler
 		// update rtt own session
 		S_Rtt recv = packet as S_Rtt;
 
-		float rtt = (Time.realtimeSinceStartup - recv.Time) * 1000f;
+		int rtt = (int)((Time.realtimeSinceStartup - recv.Time) * 1000f);
 		Debug.Log($"> S_Rtt : {rtt}");
+
+		Managers.Object.MyPlayer.RTT = rtt;
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Protocol;
+﻿using System;
+using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,13 @@ public class MyPlayerController : PlayerController
 {
 	bool _moveKeyPressed = false;
 
+	private int _rtt = 100;
+	public int RTT
+	{
+		get { return _rtt; }
+		set { _rtt = Math.Max(_rtt, 0); }
+	}
+	
 	protected override void Init()
 	{
 		base.Init();
