@@ -88,16 +88,13 @@ public class PacketHandler
 	public static void C_RttHandler(PacketSession session, IMessage packet)
 	{
 		C_Rtt recv = packet as C_Rtt;
-		
 		Console.WriteLine($"> C_Rtt : {recv.Time}");
-		// S_Rtt sendPkt = new S_Rtt();
-		// sendPkt.Time = recv.Time;
+
+		S_Rtt sendPkt = new S_Rtt();
+		sendPkt.Time = recv.Time;
 		
-		// 500ms 딜레이 테스트
 		ClientSession clientSession = session as ClientSession;
-		clientSession.HandleRtt(recv.Time);
-		// clientSession.Send(sendPkt);
-		// GameLogic.Instance.Push();
+		clientSession.Send(sendPkt);
 	}
 }
 
