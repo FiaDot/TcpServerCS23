@@ -198,6 +198,18 @@ namespace Server
 	        rtt = System.Environment.TickCount - pong.Time;
 	        Console.WriteLine($"| HandlePong RTT={rtt}");
         }
+
+        public void HandleRtt(float time)
+        {
+	        GameLogic.Instance.PushAfter(500, SendRtt, time);
+        }
+
+        public void SendRtt(float time)
+        {
+	        S_Rtt sendPkt = new S_Rtt();
+			sendPkt.Time = time;
+			Send(sendPkt);
+        }
     }
 
 }

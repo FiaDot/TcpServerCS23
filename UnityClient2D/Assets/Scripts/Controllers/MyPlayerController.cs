@@ -12,7 +12,7 @@ public class MyPlayerController : PlayerController
 	{
 		base.Init();
 
-		// StartCoroutine("SendRtt");
+		StartCoroutine("SendRtt");
 	}
 
 	protected override void UpdateController()
