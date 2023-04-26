@@ -101,12 +101,14 @@ class PacketHandler
 	{
 		Debug.Log($"> S_Ping");
 		
-		// invalid ;;;
-		// ServerSession serverSession = session as ServerSession;
-		// serverSession.Send(packet);
-
+		S_Ping recv = packet as S_Ping;
+		ServerSession serverSession = session as ServerSession;
+		
 		C_Pong pong = new C_Pong();
-		Managers.Network.Send(pong);
+		pong.Time = recv.Time;
+		serverSession.Send(pong);
+
+		// Managers.Network.Send(pong);
 	}
 	
 	public static void S_RttHandler(PacketSession session, IMessage packet)

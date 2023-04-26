@@ -105,9 +105,11 @@ message SkillInfo {
 }
 
 message S_Ping {
+    int32 time = 1;
 }
 
 message C_Pong {
+    int32 time = 1;
 }
 
 message C_Rtt {

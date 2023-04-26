@@ -21,7 +21,9 @@ namespace Server
 
 		private long _pingPongTick = 0;
 
-		private readonly int pingPeriod = 5000;
+		private readonly int pingPeriod = 1000;
+
+		private int rtt = 0;
 		
 		// send queue for contents
 		object _lock = new object();
@@ -184,15 +186,17 @@ namespace Server
 	        }
 
 	        S_Ping pkt = new S_Ping();
+	        pkt.Time = System.Environment.TickCount;
 	        Send(pkt);
 	        
 	        GameLogic.Instance.PushAfter(pingPeriod, Ping);
         }
         
-        public void HandlePong()
+        public void HandlePong(C_Pong pong)
         {
 	        _pingPongTick = System.Environment.TickCount64;
-	        // Console.WriteLine($"| HandlePong tick={_pingPongTick}");
+	        rtt = System.Environment.TickCount - pong.Time;
+	        Console.WriteLine($"| HandlePong RTT={rtt}");
         }
     }
 

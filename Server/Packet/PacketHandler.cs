@@ -79,8 +79,10 @@ public class PacketHandler
 	public static void C_PongHandler(PacketSession session, IMessage packet)
 	{
 		Console.WriteLine($"> C_Pong");
+		
+		C_Pong recv = packet as C_Pong;
 		ClientSession clientSession = session as ClientSession;
-		clientSession.HandlePong();
+		clientSession.HandlePong(recv);
 	}
 	
 	public static void C_RttHandler(PacketSession session, IMessage packet)
