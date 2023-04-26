@@ -11,6 +11,7 @@ namespace Server.Game
 		public int RoomId { get; set; }
 		List<Player> _players = new List<Player>();
 
+		// 누군가 주기적으로 호출해줘야 한다 call by GameLogic
 		public void Update()
 		{
 			Flush();

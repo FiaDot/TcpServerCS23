@@ -95,4 +95,24 @@ class PacketHandler
 			pc.UseSkill(skillPacket.Info.SkillId);
 		}
 	}
+
+
+	public static void S_PingHandler(PacketSession session, IMessage packet)
+	{
+		Debug.Log($"> S_Ping");
+		
+		// invalid ;;;
+		// ServerSession serverSession = session as ServerSession;
+		// serverSession.Send(packet);
+
+		C_Pong pong = new C_Pong();
+		Managers.Network.Send(pong);
+	}
+	
+	public static void S_RttHandler(PacketSession session, IMessage packet)
+	{
+		// update rtt own session
+		S_Rtt recv = packet as S_Rtt;
+		Debug.Log($"> S_Rtt : {recv.Time}");
+	}
 }

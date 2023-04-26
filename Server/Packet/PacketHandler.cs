@@ -75,6 +75,19 @@ public class PacketHandler
 		// room.HandleSkill(player, skillPacket);
 		room.Push(room.HandleSkill, player, skillPacket);
 	}
+
+	public static void C_PongHandler(PacketSession session, IMessage packet)
+	{
+		Console.WriteLine($"> C_Pong");
+		ClientSession clientSession = session as ClientSession;
+		clientSession.HandlePong();
+	}
+	
+	public static void C_RttHandler(PacketSession session, IMessage packet)
+	{
+		ClientSession clientSession = session as ClientSession;
+		clientSession.Send(packet);
+	}
 }
 
 

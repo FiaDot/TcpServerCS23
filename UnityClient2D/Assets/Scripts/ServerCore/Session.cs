@@ -88,6 +88,8 @@ namespace ServerCore
             RegisterRecv();
         }
 
+        // TODO : Send(List...)
+        
         public void Send(ArraySegment<byte> sendBuff)
 		{
             // _socket.Send(sendBuff);

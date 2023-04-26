@@ -11,6 +11,8 @@ public class MyPlayerController : PlayerController
 	protected override void Init()
 	{
 		base.Init();
+
+		// StartCoroutine("SendRtt");
 	}
 
 	protected override void UpdateController()
@@ -136,4 +138,16 @@ public class MyPlayerController : PlayerController
 			_updated = false;
 		}
 	}
+
+	IEnumerator SendRtt()
+	{
+		while (true)
+		{
+			C_Rtt rtt = new C_Rtt();
+			rtt.Time = Time.realtimeSinceStartup;
+			Managers.Network.Send(rtt);
+			yield return new WaitForSeconds(1);
+		}
+	}
+	
 }

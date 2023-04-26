@@ -18,6 +18,12 @@ namespace Server
     {
         public Player MyPlayer { get; set; }
 		public int SessionId { get; set; }
+
+		private long _pingPongTick = 0;
+		
+		// send queue for contents
+		object _lock = new object();
+		List<ArraySegment<byte>> _reserveQueue = new List<ArraySegment<byte>>();
 		
         public void Send(IMessage message)
         {
@@ -36,8 +42,32 @@ namespace Server
             Array.Copy(message.ToByteArray(), 0, sendBuffer, 4, size);
 
             Console.WriteLine($"< {msgId} ");
-            Send(new ArraySegment<byte>(sendBuffer));
+            
+            // 바로 안보내고 sendQueue에 넣음 (send thread 분리)
+            // Send(new ArraySegment<byte>(sendBuffer));
+            
+            lock (_lock)
+            {
+	            _reserveQueue.Add(sendBuffer);
+            }
         }
+        
+        // 실제 Network IO 보내는 부분
+		public void FlushSend()
+		{
+			List<ArraySegment<byte>> sendList = null;
+
+			lock (_lock)
+			{
+				if (_reserveQueue.Count == 0)
+					return;
+
+				sendList = _reserveQueue;
+				_reserveQueue = new List<ArraySegment<byte>>();
+			}
+
+			Send(sendList);
+		}
 
         public override void OnConnected(EndPoint endPoint)
         {
@@ -100,6 +130,8 @@ namespace Server
 			}
 
 			RoomManager.Instance.Find(1).EnterGame(MyPlayer);
+			
+			GameLogic.Instance.PushAfter(1000, Ping);
         }
 
         public override void OnDisconnected(EndPoint endPoint)
@@ -135,8 +167,32 @@ namespace Server
         {
             // Console.WriteLine($"< Send Transferred {numOfBytes} bytes ");
         }
-    }
+        
+        public void Ping()
+        {
+	        if (_pingPongTick > 0)
+	        {
+		        long delta = System.Environment.TickCount64 - _pingPongTick;
+		        if (delta > 5 * 1000) // sec
+		        {
+			        Console.WriteLine("Disconnected by heartbeat");
+			        Disconnect();
+			        return;
+		        }
+	        }
 
+	        S_Ping pkt = new S_Ping();
+	        Send(pkt);
+	        
+	        GameLogic.Instance.PushAfter(1000, Ping);
+        }
+        
+        public void HandlePong()
+        {
+	        _pingPongTick = System.Environment.TickCount64;
+	        Console.WriteLine($"| HandlePong tick={_pingPongTick}");
+        }
+    }
 
 }
 

@@ -12,7 +12,20 @@ namespace Server
 		int _sessionId = 0;
 		Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
 		object _lock = new object();
+		
+		// send queue for contents 
+		public List<ClientSession> GetSessions()
+		{
+			List<ClientSession> sessions = new List<ClientSession>();
 
+			lock (_lock)
+			{
+				sessions = _sessions.Values.ToList();
+			}
+
+			return sessions;
+		}
+		
 		public ClientSession Generate()
 		{
 			lock (_lock)

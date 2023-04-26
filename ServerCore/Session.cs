@@ -77,7 +77,6 @@ namespace ServerCore
 		{
 			_socket = socket;
 
-
             _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
             // recvArgs.UserToken // 식별자로 customize 가능
             // _recvArgs.SetBuffer(new byte[1024], 0, 1024);
@@ -86,6 +85,21 @@ namespace ServerCore
 
             RegisterRecv();
         }
+
+        public void Send(List<ArraySegment<byte>> sendBuffList)
+		{
+			if (sendBuffList.Count == 0)
+				return;
+
+			lock (_lock)
+			{
+				foreach (ArraySegment<byte> sendBuff in sendBuffList)
+					_sendQueue.Enqueue(sendBuff);
+
+				if (_pendingList.Count == 0)
+					RegisterSend();
+			}
+		}
 
         public void Send(ArraySegment<byte> sendBuff)
 		{

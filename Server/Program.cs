@@ -14,13 +14,32 @@ namespace ServerCore;
 class Program
 {
     static Listener _listener = new Listener();
-    //
-    // static void FlushRoom()
-    // {
-    //     JobTimer.Instance.Push(FlushRoom, 250);
-    // }
-    //
 
+    static void GameLogicTask()
+    {
+	    while (true)
+	    {
+		    GameLogic.Instance.Update();
+		    Thread.Sleep(0);
+	    }
+    }
+
+            
+    // send thread
+    static void NetworkTask()
+    {
+	    while (true)
+	    {
+		    List<ClientSession> sessions = SessionManager.Instance.GetSessions();
+		    foreach (ClientSession session in sessions)
+		    {
+			    session.FlushSend();
+		    }
+
+		    Thread.Sleep(0);
+	    }
+    }
+            
     private static List<System.Timers.Timer> _timers = new List<Timer>();
     static void TickRoom(GameRoom room, int tick = 100)
     {
@@ -67,20 +86,35 @@ class Program
         int port = 7777;
         IPEndPoint endPoint = new IPEndPoint(NetworkInterfaceHelper.GetPublicIp(), port);
         
-        _listener.Init(endPoint, () => { return new ClientSession(); });
+        
+        // 생성과 동시에 세션 메니져 추가
+        // _listener.Init(endPoint, () => { return new ClientSession(); });
+        
+        _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
         
         Console.WriteLine($"Listening... BIND {endPoint.ToString()}");
 
+        // NetworkTask
+        {
+	        Thread t = new Thread(NetworkTask);
+	        t.Name = "Network Send";
+	        t.Start();
+        }
+			
         // JobTimer.Instance.Push(FlushRoom);
         // JobTimer.Instance.Push(() => Console.WriteLine("250"), 250);
         // JobTimer.Instance.Push(() => Console.WriteLine("500"), 500);
-        while (true)
-        {
-            // JobTimer.Instance.Flush();
-            // GameRoom room = RoomManager.Instance.Find(1);
-            // room.Push(room.Flush);
-            Thread.Sleep(100);
-        }      
+        // while (true)
+        // {
+        //     // JobTimer.Instance.Flush();
+        //     // GameRoom room = RoomManager.Instance.Find(1);
+        //     // room.Push(room.Flush);
+        //     Thread.Sleep(100);
+        // }      
+        
+        // GameLogic
+        Thread.CurrentThread.Name = "GameLogic";
+        GameLogicTask();
     }
 }
 

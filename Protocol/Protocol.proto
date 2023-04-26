@@ -18,6 +18,10 @@ enum MsgId {
   S_MOVE = 8;
   C_SKILL = 9;
   S_SKILL = 10;
+  S_PING = 11;
+  C_PONG = 12;
+  C_RTT = 13;
+  S_RTT = 14;
 }
 
 enum CreatureState
@@ -98,4 +102,18 @@ message PositionInfo {
 
 message SkillInfo {
   int32 skillId = 1;
+}
+
+message S_Ping {
+}
+
+message C_Pong {
+}
+
+message C_Rtt {
+    float time = 1; // Time.time in unity? 
+}
+
+message S_Rtt {
+    float time = 1;
 }
