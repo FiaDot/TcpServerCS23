@@ -20,6 +20,8 @@ namespace Server
 		public int SessionId { get; set; }
 
 		private long _pingPongTick = 0;
+
+		private readonly int pingPeriod = 5000;
 		
 		// send queue for contents
 		object _lock = new object();
@@ -131,7 +133,7 @@ namespace Server
 
 			RoomManager.Instance.Find(1).EnterGame(MyPlayer);
 			
-			GameLogic.Instance.PushAfter(1000, Ping);
+			GameLogic.Instance.PushAfter(pingPeriod, Ping);
         }
 
         public override void OnDisconnected(EndPoint endPoint)
@@ -184,13 +186,13 @@ namespace Server
 	        S_Ping pkt = new S_Ping();
 	        Send(pkt);
 	        
-	        GameLogic.Instance.PushAfter(1000, Ping);
+	        GameLogic.Instance.PushAfter(pingPeriod, Ping);
         }
         
         public void HandlePong()
         {
 	        _pingPongTick = System.Environment.TickCount64;
-	        Console.WriteLine($"| HandlePong tick={_pingPongTick}");
+	        // Console.WriteLine($"| HandlePong tick={_pingPongTick}");
         }
     }
 
