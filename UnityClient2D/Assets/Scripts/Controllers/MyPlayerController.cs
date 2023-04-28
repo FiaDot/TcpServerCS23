@@ -21,6 +21,8 @@ public class MyPlayerController : PlayerController
 		base.Init();
 
 		StartCoroutine("SendRtt");
+		
+		StartCoroutine("SendMoving");
 	}
 
 	protected override void UpdateController()
@@ -98,6 +100,52 @@ public class MyPlayerController : PlayerController
 		}
 	}
 
+
+	protected override void UpdateMoving()
+	{
+		Vector3 destPos = CellPos;
+
+		switch (Dir)
+		{
+			case MoveDir.Up:
+				// destPos += Vector3.up;
+				destPos += Vector3.up * _speed * Time.deltaTime;
+				break;
+			case MoveDir.Down:
+				destPos += Vector3.down * _speed * Time.deltaTime;
+				break;
+			case MoveDir.Left:
+				destPos += Vector3.left * _speed * Time.deltaTime;
+				break;
+			case MoveDir.Right:
+				destPos += Vector3.right * _speed * Time.deltaTime;
+				break;
+		}
+
+		// if (Managers.Map.CanGo(destPos))
+		// {
+		// 	if (Managers.Object.Find(destPos) == null)
+		// 	{
+				// 	}
+				// }
+
+				// CheckUpdatedFlag();
+
+				if (_moveKeyPressed == false)
+				{
+					State = CreatureState.Idle;
+					// CheckUpdatedFlag();
+					return;
+				}
+				else
+				{
+					CellPos = destPos;
+					transform.position = CellPos;
+					
+				}
+	}
+	
+	
 	protected override void MoveToNextPos()
 	{
 		if (_moveKeyPressed == false)
@@ -135,7 +183,7 @@ public class MyPlayerController : PlayerController
 
 		CheckUpdatedFlag();
 	}
-
+	
 	protected override void CheckUpdatedFlag()
 	{
 		if (_updated)
@@ -146,6 +194,24 @@ public class MyPlayerController : PlayerController
 			_updated = false;
 		}
 	}
+	
+	IEnumerator SendMoving()
+	{
+		while(true)
+		{
+			if (_updated)
+			{
+				C_Move movePacket = new C_Move();
+				movePacket.PosInfo = PosInfo;
+				Managers.Network.Send(movePacket);
+				_updated = false;
+			}
+		
+			yield return new WaitForSeconds(1.0f/5.0f);
+		}
+		
+	}
+		
 
 	IEnumerator SendRtt()
 	{
