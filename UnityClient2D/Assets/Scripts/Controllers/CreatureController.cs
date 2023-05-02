@@ -286,7 +286,7 @@ public class CreatureController : MonoBehaviour
 	private Vector3 syncEndPosition = Vector3.zero;
 
 	protected void RecvPos()
-	{ 
+	{
 		Vector3 destPos = CellPos; // Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
 		Vector3 moveDir = destPos - transform.position;
 
@@ -308,6 +308,26 @@ public class CreatureController : MonoBehaviour
 	{
 		syncTime += Time.deltaTime;
 		transform.position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
+		
+		// float fDeltaTime = Time.smoothDeltaTime;
+	 //
+		// Vector2 vPos    = transform.localPosition;
+		// Vector2 vNow    = Vector2.zero;
+  //   
+		// m_vTargetPos = vPos+inputDir*(currentMovementSpeed*(MOVING_INTERVAL_TIME+fDeltaTime));
+		// m_fInterval += Time.unscaledDeltaTime;
+		// if( MOVING_INTERVAL_TIME <= m_fInterval )
+		// {
+	 //        m_fInterval = 0f;
+	 //        // Debug.Log("SendPos");
+	 //        SendPos(); 
+		// }
+		//
+		// // vNow = Moving(vPos, _GetTargetPos(vPos, m_vTargetPos, currentMovementSpeed, fDeltaTime), currentMovementSpeed, fDeltaTime);
+		// vNow = _GetTargetPos(vPos, m_vTargetPos, currentMovementSpeed, fDeltaTime);
+		// // transform.localPosition = m_vTargetPos;
+		// transform.localPosition = vNow;
+		//
 	}
 		
 	protected virtual void MoveToNextPos()
