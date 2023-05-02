@@ -45,7 +45,7 @@ namespace Server
             // write encoded
             Array.Copy(message.ToByteArray(), 0, sendBuffer, 4, size);
 
-            Console.WriteLine($"< {msgId} ");
+            // Console.WriteLine($"< {msgId} ");
             
             // 바로 안보내고 sendQueue에 넣음 (send thread 분리)
             // Send(new ArraySegment<byte>(sendBuffer));

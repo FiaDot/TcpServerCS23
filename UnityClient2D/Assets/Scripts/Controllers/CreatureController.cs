@@ -295,7 +295,7 @@ public class CreatureController : MonoBehaviour
         lastSynchronizationTime = Time.time;
  
         // syncEndPosition = syncPosition;
-        syncEndPosition = transform.position + moveDir * syncDelay;
+        syncEndPosition = destPos + moveDir * syncDelay;
         syncStartPosition = transform.position;
 	}
 	
