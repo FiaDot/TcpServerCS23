@@ -112,26 +112,35 @@ public class NetCharacter : MonoBehaviour
 	    // Debug.Log(transform.position);
 	    // transform.position = ToVector3(netMoveInfo.Pos);
 	    
-	    syncTime = 0f;
-	    syncDelay = Time.time - lastSynchronizationTime;
+	    syncTimeElapsed = 0f;
+	    syncDuration = Time.time - lastSynchronizationTime;
         lastSynchronizationTime = Time.time;
+        // Debug.Log(syncDuration); // sendPeriod + a 가 됨
 
 	    srcPos = transform.position;
 	    dstPos = ToVector3(netMoveInfo.Pos);
     }
 
-    private float syncTime = 0f;
-    private float syncDelay = 0f;
+    private float syncTimeElapsed = 0f; // lerp 진행 시간
+    private float syncDuration = 0f; // 동기화 주기
     
-    private Vector3 srcPos = Vector3.zero;
-	private Vector3 dstPos = Vector3.zero;
+    private Vector3 srcPos = Vector3.zero; // 이동 정보 받은 시점의 위치
+	private Vector3 dstPos = Vector3.zero; // 이동 정보 받았을 때 가야하는 위치 
 	
-	private float lastSynchronizationTime = 0f;
+	private float lastSynchronizationTime = 0f; 
 	
     void Interpolation()
     {
-	    syncTime += Time.deltaTime;
-		transform.position = Vector3.Lerp(srcPos, dstPos, syncTime / syncDelay);
+	    // 이렇게 해야 이징 처리 안되고 linear 하게 처리됨
+	    if (syncTimeElapsed < syncDuration)
+	    {
+			syncTimeElapsed += Time.deltaTime;
+			transform.position = Vector3.Lerp(srcPos, dstPos, syncTimeElapsed / syncDuration);
+	    }
+	    else
+	    {
+		    transform.position = dstPos;
+	    }
     }
     
 }
