@@ -122,7 +122,7 @@ namespace Server
 				// MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
 
 				MyPlayer.Info.NetMoveInfo.Pos = new vector3Net();
-				MyPlayer.Info.NetMoveInfo.Pos.X = (MyPlayer.Info.PlayerId * 1.0f);
+				MyPlayer.Info.NetMoveInfo.Pos.X = 0.0f;
 				MyPlayer.Info.NetMoveInfo.Pos.Y = 0.0f;
 				MyPlayer.Info.NetMoveInfo.Pos.Z = 0.0f;
 				

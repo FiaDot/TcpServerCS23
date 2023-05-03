@@ -21,8 +21,8 @@ public class ObjectManager
 			MyPlayer = go.GetComponent<NetCharacter>();
 			MyPlayer.Id = info.PlayerId;
 			MyPlayer.IsMine = true;
-			MyPlayer.NetMoveInfo = info.NetMoveInfo;
-			MyPlayer.InitPos();
+			// MyPlayer.NetMoveInfo = info.NetMoveInfo;
+			MyPlayer.InitPos(info.NetMoveInfo);
 		}
 		else
 		{
@@ -32,9 +32,9 @@ public class ObjectManager
 
 			NetCharacter pc = go.GetComponent<NetCharacter>();
 			pc.Id = info.PlayerId;
-			MyPlayer.NetMoveInfo = info.NetMoveInfo;
-			MyPlayer.IsMine = false;
-			pc.InitPos();
+			// pc.NetMoveInfo = info.NetMoveInfo;
+			pc.IsMine = false;
+			pc.InitPos(info.NetMoveInfo);
 		}
 	}
 

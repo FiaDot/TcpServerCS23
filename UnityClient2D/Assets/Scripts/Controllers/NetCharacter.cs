@@ -12,25 +12,10 @@ public class NetCharacter : MonoBehaviour
 	
 	public bool IsMine { get; set; }
 
-	private NetMove _netMoveInfo = new NetMove();
-
-	public NetMove NetMoveInfo
-	{
-		get { return _netMoveInfo; }
-		set { _netMoveInfo = value; }
-	}
-
-	// public Vector3 Dir
-	// {
-	// 	get { return ToVector3(_netMoveInfo.Dir); }
-	// 	set
-	// 	{
-	// 		
-	// 	}
-	// }
-
 	private Vector3 inputDir;
-	
+
+	// cache
+	private NetMove _netMoveInfo = new NetMove();
 	
 	Vector3 ToVector3(vector3Net netValue)
 	{
@@ -48,9 +33,9 @@ public class NetCharacter : MonoBehaviour
 	
 	
 	// 서버 접속 후 초기 위치 지정
-	public void InitPos()
+	public void InitPos(NetMove netMoveInfo)
 	{
-		transform.position = ToVector3(NetMoveInfo.Pos);
+		transform.position = ToVector3(netMoveInfo.Pos);
 	}
 	
 	void Start()
@@ -64,6 +49,7 @@ public class NetCharacter : MonoBehaviour
 	    if (IsMine)
 	    {
 		    InputMovement();
+		    SendMove();
 	    }
 	    
     }
@@ -94,11 +80,37 @@ public class NetCharacter : MonoBehaviour
 	    {
 			destPos += dir * (_speed * Time.deltaTime);
 			// Debug.Log(destPos);
-
 			transform.position += destPos;
 	    }
     }
 
+    // [SerializeField]
+    public float MOVING_INTERVAL_TIME = 0.3f;
+    private float sendPeriod = 0f; // 이동 패킷 전송 주기.
     
+    void SendMove()
+    {
+	    sendPeriod += Time.unscaledDeltaTime;
+	    if (MOVING_INTERVAL_TIME > sendPeriod)
+		    return;
+	    sendPeriod = 0f;
+
+		C_Move movePacket = new C_Move();
+		_netMoveInfo.Pos = ToVector3Net(transform.position);
+		
+		movePacket.NetMoveInfo = _netMoveInfo;
+		Managers.Network.Send(movePacket);
+    }
+    
+    public void OnNetworkMove(NetMove netMoveInfo)
+    {
+	    if (IsMine)
+	    {
+		    return;
+	    }
+
+	    Debug.Log(transform.position);
+	    transform.position = ToVector3(netMoveInfo.Pos);
+    }
     
 }
