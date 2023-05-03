@@ -125,8 +125,8 @@ public class NetCharacter : MonoBehaviour
         // Debug.Log(syncDuration); // sendPeriod + a 가 됨
 
 	    srcPos = transform.position;
-	    // dstPos = ToVector3(netMoveInfo.Pos) + ToVector3(netMoveInfo.Dir) * syncDuration;
 	    dstPos = ToVector3(netMoveInfo.Pos) + ToVector3(netMoveInfo.Dir) * syncDuration;
+	    // dstPos = ToVector3(netMoveInfo.Pos);
     }
 
     private float syncTimeElapsed = 0f; // lerp 진행 시간
