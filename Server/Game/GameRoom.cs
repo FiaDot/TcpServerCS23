@@ -98,32 +98,21 @@ namespace Server.Game
 			if (player == null)
 				return;
 
-			PositionInfo movePosInfo = movePacket.PosInfo;
+			NetMove netMoveInfo = movePacket.NetMoveInfo;
 			PlayerInfo info = player.Info;
 			
-			// // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
-			// if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
-			// {
-			// 	if (_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
-			// 		return;
-			// }
-
 			// 일단 서버에서 좌표 이동
-			info.PosInfo.State = movePosInfo.State;
-			info.PosInfo.MoveDir = movePosInfo.MoveDir;
-			info.PosInfo.Pos = movePosInfo.Pos;
-			info.PosInfo.Rot = movePosInfo.Rot;
+			info.NetMoveInfo = netMoveInfo;
 			
-			// _map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
-
 			// 다른 플레이어한테도 알려준다
 			S_Move resMovePacket = new S_Move();
 			resMovePacket.PlayerId = player.Info.PlayerId;
-			resMovePacket.PosInfo = movePacket.PosInfo;
+			resMovePacket.NetMoveInfo = movePacket.NetMoveInfo;
 
 			Broadcast(resMovePacket);
 		}
 
+		
 		public void HandleSkill(Player player, C_Skill skillPacket)
 		{
 			// if (player == null)

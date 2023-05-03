@@ -74,12 +74,15 @@ class PacketHandler
 		if (null == go)
 			return;
 
-		CreatureController cc = go.GetComponent<CreatureController>();
+		NetCharacter cc = go.GetComponent<NetCharacter>();
 		if (null == cc)
 			return;
-		
-		cc.PosInfo = recvPacket.PosInfo;
+
+		cc.NetMoveInfo = recvPacket.NetMoveInfo;
+		//cc.PosInfo = recvPacket.PosInfo;
+		// cc.OnMove(recvPacket.PosInfo);
 	}
+	
 	
 	public static void S_SkillHandler(PacketSession session, IMessage packet)
 	{
@@ -88,12 +91,12 @@ class PacketHandler
 		GameObject go = Managers.Object.FindById(skillPacket.PlayerId);
 		if (go == null)
 			return;
-
-		PlayerController pc = go.GetComponent<PlayerController>();
-		if (pc != null)
-		{
-			pc.UseSkill(skillPacket.Info.SkillId);
-		}
+		//
+		// PlayerController pc = go.GetComponent<PlayerController>();
+		// if (pc != null)
+		// {
+		// 	pc.UseSkill(skillPacket.Info.SkillId);
+		// }
 	}
 
 
@@ -119,6 +122,6 @@ class PacketHandler
 		int rtt = (int)((Time.realtimeSinceStartup - recv.Time) * 1000f);
 		Debug.Log($"> S_Rtt : {rtt}");
 
-		Managers.Object.MyPlayer.RTT = rtt;
+		// Managers.Object.MyPlayer.RTT = rtt;
 	}
 }

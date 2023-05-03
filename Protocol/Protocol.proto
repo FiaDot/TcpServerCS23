@@ -24,22 +24,6 @@ enum MsgId {
   S_RTT = 14;
 }
 
-enum CreatureState
-{
-    IDLE = 0;
-    MOVING = 1;
-    SKILL = 2;
-    DEAD = 3;
-}
-
-enum MoveDir 
-{    
-    UP = 0;
-    DOWN = 1;
-    LEFT = 2;
-    RIGHT = 3;
-}
-
 message C_Chat {
   string context = 1;
 }
@@ -63,13 +47,13 @@ message S_Despawn {
   repeated int32 playerIds = 1;
 }
 
-message C_Move {
-  PositionInfo posInfo = 1;
+message C_Move {  
+  NetMove netMoveInfo = 1;
 }
 
 message S_Move {
-  int32 playerId =1;
-  PositionInfo posInfo = 2;
+  NetMove netMoveInfo = 1;
+  int32 playerId = 2;  
 }
 
 message C_Skill {
@@ -84,7 +68,7 @@ message S_Skill {
 message PlayerInfo {
   int32 playerId = 1;
   string name = 2;
-  PositionInfo posInfo = 3;
+  NetMove netMoveInfo = 3;
 }
 
 message vector3Net {
@@ -93,11 +77,16 @@ message vector3Net {
   float z = 3;
 }
 
-message PositionInfo {
-    CreatureState state = 1;
-    MoveDir moveDir = 2;
-    vector3Net pos = 3;
+message NetMove {
+    vector3Net pos = 1;
+    vector3Net dir = 2;
+    vector3Net acc = 3;
     vector3Net rot = 4;
+    vector3Net rotAcc = 5;
+    float speed = 6;
+    int64 serverTime = 7;
+    int64 clientTime = 8;
+    int32 flag = 9;
 }
 
 message SkillInfo {

@@ -95,12 +95,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4645539611938143385}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0ba002242d5940faa9c4e5cb1350df0, type: 3}
+  m_Script: {fileID: 11500000, guid: f7791d5f0b9f486b97df6ffb37607024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
-  _state: 0
-  _dir: 2
 --- !u!95 &4645539611938143381
 Animator:
   serializedVersion: 5

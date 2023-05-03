@@ -117,19 +117,40 @@ namespace Server
             MyPlayer = PlayerManager.Instance.Add();
 			{
 				MyPlayer.Info.Name = $"Player_{MyPlayer.Info.PlayerId}";
-				MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-				MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
+				
+				// MyPlayer.Info.PosInfo.State = CreatureState.Idle;
+				// MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
 
-				MyPlayer.Info.PosInfo.Pos = new vector3Net();
-				MyPlayer.Info.PosInfo.Pos.X = 0.0f;
-				MyPlayer.Info.PosInfo.Pos.Y = 0.0f;
-				MyPlayer.Info.PosInfo.Pos.Z = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Pos = new vector3Net();
+				MyPlayer.Info.NetMoveInfo.Pos.X = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Pos.Y = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Pos.Z = 0.0f;
 				
-				MyPlayer.Info.PosInfo.Rot = new vector3Net();
-				MyPlayer.Info.PosInfo.Rot.X = 0.0f;
-				MyPlayer.Info.PosInfo.Rot.Y = 0.0f;
-				MyPlayer.Info.PosInfo.Rot.Z = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Dir = new vector3Net();
+				MyPlayer.Info.NetMoveInfo.Dir.X = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Dir.Y = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Dir.Z = 0.0f;
 				
+				MyPlayer.Info.NetMoveInfo.Acc = new vector3Net();
+				MyPlayer.Info.NetMoveInfo.Acc.X = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Acc.Y = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Acc.Z = 0.0f;
+				
+				MyPlayer.Info.NetMoveInfo.Rot = new vector3Net();
+				MyPlayer.Info.NetMoveInfo.Rot.X = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Rot.Y = 0.0f;
+				MyPlayer.Info.NetMoveInfo.Rot.Z = 0.0f;
+				
+				MyPlayer.Info.NetMoveInfo.RotAcc = new vector3Net();
+				MyPlayer.Info.NetMoveInfo.RotAcc.X = 0.0f;
+				MyPlayer.Info.NetMoveInfo.RotAcc.Y = 0.0f;
+				MyPlayer.Info.NetMoveInfo.RotAcc.Z = 0.0f;
+				
+			    MyPlayer.Info.NetMoveInfo.Speed = 0.0f;
+			    MyPlayer.Info.NetMoveInfo.ServerTime = 0;
+			    MyPlayer.Info.NetMoveInfo.ClientTime = 0;
+			    MyPlayer.Info.NetMoveInfo.Flag = 0;
+			    
 				MyPlayer.Session = this;
 			}
 

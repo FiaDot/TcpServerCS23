@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ObjectManager
 {
-	public MyPlayerController MyPlayer { get; set; }
+	public NetCharacter MyPlayer { get; set; }
 	Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
 	// List<GameObject> _objects = new List<GameObject>();
 
@@ -18,11 +18,11 @@ public class ObjectManager
 			go.name = info.Name;
 			_objects.Add(info.PlayerId, go);
 
-			MyPlayer = go.GetComponent<MyPlayerController>();
+			MyPlayer = go.GetComponent<NetCharacter>();
 			MyPlayer.Id = info.PlayerId;
-			// MyPlayer.CellPos = new Vector3Int(info.PosX, info.PosY, 0);
-			MyPlayer.PosInfo = info.PosInfo;
-			MyPlayer.SyncPos();
+			MyPlayer.IsMine = true;
+			MyPlayer.NetMoveInfo = info.NetMoveInfo;
+			MyPlayer.InitPos();
 		}
 		else
 		{
@@ -30,11 +30,11 @@ public class ObjectManager
 			go.name = info.Name;
 			_objects.Add(info.PlayerId, go);
 
-			PlayerController pc = go.GetComponent<PlayerController>();
+			NetCharacter pc = go.GetComponent<NetCharacter>();
 			pc.Id = info.PlayerId;
-			// pc.CellPos = new Vector3Int(info.PosX, info.PosY, 0);
-			pc.PosInfo = info.PosInfo;
-			pc.SyncPos();
+			MyPlayer.NetMoveInfo = info.NetMoveInfo;
+			MyPlayer.IsMine = false;
+			pc.InitPos();
 		}
 	}
 
@@ -71,12 +71,12 @@ public class ObjectManager
 	{
 		foreach (GameObject obj in _objects.Values)
 		{
-			CreatureController cc = obj.GetComponent<CreatureController>();
+			NetCharacter cc = obj.GetComponent<NetCharacter>();
 			if (cc == null)
 				continue;
 
-			if (cc.CellPos == cellPos)
-				return obj;
+			// if (cc.CellPos == cellPos)
+			// 	return obj;
 		}
 
 		return null;
