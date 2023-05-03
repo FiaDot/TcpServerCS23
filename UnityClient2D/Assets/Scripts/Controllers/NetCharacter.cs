@@ -94,7 +94,7 @@ public class NetCharacter : MonoBehaviour
     }
 
     // [SerializeField]
-    private float MOVING_INTERVAL_TIME = 1.0f;
+    private float MOVING_INTERVAL_TIME = 0.3f;
     private float sendPeriod = 0f; // 이동 패킷 전송 주기.
     
     void SendMove()
