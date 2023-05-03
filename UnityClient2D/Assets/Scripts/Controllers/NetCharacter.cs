@@ -19,13 +19,18 @@ public class NetCharacter : MonoBehaviour
 		set { _netMoveInfo = value; }
 	}
 
+	Vector3 ToVector3(vector3Net netValue)
+	{
+		return new Vector3(netValue.X, netValue.Y, netValue.Z);
+	}
+	
+	// 서버 접속 후 초기 위치 지정
 	public void InitPos()
 	{
-		transform.position = new Vector3(NetMoveInfo.Pos.X, NetMoveInfo.Pos.Y, NetMoveInfo.Pos.Z);
+		transform.position = ToVector3(NetMoveInfo.Pos);
 	}
-
-
-void Start()
+	
+	void Start()
     {
         
     }
