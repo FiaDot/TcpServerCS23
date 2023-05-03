@@ -80,14 +80,21 @@ public class NetCharacter : MonoBehaviour
 	    
 	    if ( dir != Vector3.zero )
 	    {
-			destPos += dir * (_speed * Time.deltaTime);
+			destPos = dir * (_speed * Time.deltaTime);
+			PosDir = destPos;
+			// PosDir = dir; // 이러면 안맞음 ㅋㅋㅋ
+			
 			// Debug.Log(destPos);
 			transform.position += destPos;
 	    }
+	    // else
+	    // {
+		   //  PosDir = Vector3.zero;
+	    // }
     }
 
     // [SerializeField]
-    public float MOVING_INTERVAL_TIME = 0.3f;
+    private float MOVING_INTERVAL_TIME = 1.0f;
     private float sendPeriod = 0f; // 이동 패킷 전송 주기.
     
     void SendMove()
@@ -99,7 +106,7 @@ public class NetCharacter : MonoBehaviour
 
 		C_Move movePacket = new C_Move();
 		_netMoveInfo.Pos = ToVector3Net(transform.position);
-		
+		_netMoveInfo.Dir = ToVector3Net(PosDir);
 		movePacket.NetMoveInfo = _netMoveInfo;
 		Managers.Network.Send(movePacket);
     }
@@ -118,7 +125,8 @@ public class NetCharacter : MonoBehaviour
         // Debug.Log(syncDuration); // sendPeriod + a 가 됨
 
 	    srcPos = transform.position;
-	    dstPos = ToVector3(netMoveInfo.Pos);
+	    // dstPos = ToVector3(netMoveInfo.Pos) + ToVector3(netMoveInfo.Dir) * syncDuration;
+	    dstPos = ToVector3(netMoveInfo.Pos) + ToVector3(netMoveInfo.Dir) * syncDuration;
     }
 
     private float syncTimeElapsed = 0f; // lerp 진행 시간
@@ -126,6 +134,9 @@ public class NetCharacter : MonoBehaviour
     
     private Vector3 srcPos = Vector3.zero; // 이동 정보 받은 시점의 위치
 	private Vector3 dstPos = Vector3.zero; // 이동 정보 받았을 때 가야하는 위치 
+
+	private Vector3 PosDir = Vector3.zero;
+	
 	
 	private float lastSynchronizationTime = 0f; 
 	
