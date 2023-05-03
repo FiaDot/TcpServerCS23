@@ -13,7 +13,7 @@ public class NetCharacter : MonoBehaviour
 	public bool IsMine { get; set; }
 
 	private Vector3 inputDir;
-
+	
 	// cache
 	private NetMove _netMoveInfo = new NetMove();
 	
@@ -50,8 +50,10 @@ public class NetCharacter : MonoBehaviour
 	    {
 		    InputMovement();
 		    SendMove();
+		    return;
 	    }
-	    
+
+	    Interpolation();
     }
 
     void InputMovement()
@@ -105,12 +107,31 @@ public class NetCharacter : MonoBehaviour
     public void OnNetworkMove(NetMove netMoveInfo)
     {
 	    if (IsMine)
-	    {
 		    return;
-	    }
 
-	    Debug.Log(transform.position);
-	    transform.position = ToVector3(netMoveInfo.Pos);
+	    // Debug.Log(transform.position);
+	    // transform.position = ToVector3(netMoveInfo.Pos);
+	    
+	    syncTime = 0f;
+	    syncDelay = Time.time - lastSynchronizationTime;
+        lastSynchronizationTime = Time.time;
+
+	    srcPos = transform.position;
+	    dstPos = ToVector3(netMoveInfo.Pos);
+    }
+
+    private float syncTime = 0f;
+    private float syncDelay = 0f;
+    
+    private Vector3 srcPos = Vector3.zero;
+	private Vector3 dstPos = Vector3.zero;
+	
+	private float lastSynchronizationTime = 0f;
+	
+    void Interpolation()
+    {
+	    syncTime += Time.deltaTime;
+		transform.position = Vector3.Lerp(srcPos, dstPos, syncTime / syncDelay);
     }
     
 }
