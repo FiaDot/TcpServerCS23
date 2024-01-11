@@ -9,6 +9,7 @@ namespace Server.Game
 
 		public int CompareTo(JobTimerElem other)
 		{
+			// 작은값 먼저 
 			return other.execTick - execTick;
 		}
 	}
@@ -23,6 +24,7 @@ namespace Server.Game
 		public void Push(IJob action, int tickAfter = 0)
 		{
 			JobTimerElem job;
+			// 현재 시간에서 + 일정시간(tickAfter) 이후 값이 실행 시간
 			job.execTick = System.Environment.TickCount + tickAfter;
 			job.action = action;
 
@@ -46,12 +48,15 @@ namespace Server.Game
 						break;
 
 					job = _pq.Peek();
+
+					// 아직 실행 시간 안됐음
 					if (job.execTick > now)
 						break;
 
 					_pq.Dequeue();
 				}
 
+				// TODO : job 없는 경우 있지 않나?
 				job.action.Execute();
 			}
 		}
