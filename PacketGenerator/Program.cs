@@ -20,6 +20,7 @@ namespace PacketGenerator
 			bool startParsing = false;
 			foreach (string line in File.ReadAllLines(file))
 			{
+				// 패킷 아이디 정의부분 찾을 때 까지 skip
 				if (!startParsing && line.Contains("enum MsgId"))
 				{
 					startParsing = true;
@@ -29,6 +30,7 @@ namespace PacketGenerator
 				if (!startParsing)
 					continue;
 
+				// MsgId 마무리 부분 찾으면 끝!			
 				if (line.Contains("}"))
 					break;
 
@@ -37,8 +39,10 @@ namespace PacketGenerator
 					continue;
 
 				string name = names[0];
+
 				if (name.StartsWith("S_"))
 				{
+					// S->C
 					string[] words = name.Split("_");
 
 					string msgName = "";
@@ -50,6 +54,7 @@ namespace PacketGenerator
 				}
 				else if (name.StartsWith("C_"))
 				{
+					// C->S
 					string[] words = name.Split("_");
 
 					string msgName = "";
@@ -61,9 +66,13 @@ namespace PacketGenerator
 				}
 			}
 
-			string clientManagerText = string.Format(PacketFormat.managerFormat, clientRegister);
+			// UUID 같은거 하나 넣어서 서버와 클라이언트 생성코드가 동일한지 비교 가능하게도록
+			String datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+			String uid = Guid.NewGuid().ToString();
+
+			string clientManagerText = string.Format(PacketFormat.managerFormat, clientRegister, datetime, uid);
 			File.WriteAllText("ClientPacketManager.cs", clientManagerText);
-			string serverManagerText = string.Format(PacketFormat.managerFormat, serverRegister);
+			string serverManagerText = string.Format(PacketFormat.managerFormat, serverRegister, datetime, uid);
 			File.WriteAllText("ServerPacketManager.cs", serverManagerText);
 		}
 

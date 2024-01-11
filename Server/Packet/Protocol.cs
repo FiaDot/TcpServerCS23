@@ -84,7 +84,13 @@ namespace Google.Protobuf.Protocol {
   /// S : S->C
   /// </summary>
   public enum MsgId {
+    /// <summary>
+    /// 테스트
+    /// </summary>
     [pbr::OriginalName("PERSON")] Person = 0,
+    /// <summary>
+    /// 채팅 입력
+    /// </summary>
     [pbr::OriginalName("C_CHAT")] CChat = 1,
     [pbr::OriginalName("S_CHAT")] SChat = 2,
     [pbr::OriginalName("S_ENTER_GAME")] SEnterGame = 3,

@@ -7,8 +7,8 @@ option csharp_namespace = "Google.Protobuf.Protocol";
 // C : C->S
 // S : S->C
 enum MsgId {
-  PERSON = 0;
-  C_CHAT = 1;
+  PERSON = 0; // 테스트
+  C_CHAT = 1; // 채팅 입력
   S_CHAT = 2;
   S_ENTER_GAME = 3;  
   S_LEAVE_GAME = 4;
