@@ -3,7 +3,7 @@ namespace ServerCore
 {
 	public class RecvBuffer
 	{
-        /*
+		/*
 
 		1. init
 		[rw][][][][][][][][][]
@@ -19,7 +19,7 @@ namespace ServerCore
 
 		*/
 
-        ArraySegment<byte> _buffer;
+		ArraySegment<byte> _buffer;
 		int _readPos;
 		int _writePos;
 
@@ -29,18 +29,18 @@ namespace ServerCore
 		}
 
 		// 미처리 크기
-		public int DataSize { get { return _writePos - _readPos;  } }
+		public int DataSize { get { return _writePos - _readPos; } }
 
 		// 남은 공간
 		public int FreeSize { get { return _buffer.Count - _writePos; } }
 
-		// 어디 부터 읽으면 됨?
+		// 어디 부터 읽으면 됨? (DataSegment)
 		public ArraySegment<byte> ReadSegment
 		{
-            get { return new ArraySegment<byte>(_buffer.Array, _buffer.Offset + _readPos, DataSize); }
+			get { return new ArraySegment<byte>(_buffer.Array, _buffer.Offset + _readPos, DataSize); }
 		}
 
-		// 어디에 recv 받을것인가?
+		// 어디에 recv 받을것인가? (RecvSegment)
 		public ArraySegment<byte> WriteSegment
 		{
 			get { return new ArraySegment<byte>(_buffer.Array, _buffer.Offset + _writePos, FreeSize); }
@@ -49,7 +49,7 @@ namespace ServerCore
 		public void Clean()
 		{
 			int dataSize = DataSize;
-			if ( 0 == dataSize )
+			if (0 == dataSize)
 			{
 				// 남은 데이터가 없으면 모든 데이터 다 처리 상태. 커서 위치만 리셋
 				_readPos = _writePos = 0;
@@ -78,7 +78,7 @@ namespace ServerCore
 				return false; // 오류!
 
 			_writePos += numOfBytes;
-			return true;				
+			return true;
 		}
 	}
 }
