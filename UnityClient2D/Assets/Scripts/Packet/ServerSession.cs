@@ -27,13 +27,16 @@ public class ServerSession : PacketSession
 
 		Send(new ArraySegment<byte>(sendBuffer));
 	}
-	
+
 	public override void OnConnected(EndPoint endPoint)
 	{
 		Debug.Log($"OnConnected : {endPoint}");
-		
+
+		// PacketSession, IMessage, ushort
 		PacketManager.Instance.CustomHandler = (s, m, i) =>
 		{
+			// ushort(MsgId), IMessage(packet)
+			// 클라이언트(유니티)에서 Session(PacketSession)은 하나만 사용하기에 별도 전달 안함
 			PacketQueue.Instance.Push(i, m);
 		};
 	}
