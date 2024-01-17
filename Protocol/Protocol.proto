@@ -23,7 +23,7 @@ enum MsgId {
   C_RTT = 13;
   S_RTT = 14;
   C_ACTION_INPUT = 15; // 키보드 입력
-  C_ACTION_STATE = 16;
+  S_ACTION_STATE = 16; // 서버에서 물리 처리 후 응답
 }
 
 message C_Chat {
@@ -125,10 +125,10 @@ message Inputs {
     // bool dash = 7;
 }
 
-message C_Action_Input {
+message C_ActionInput {
     float delivery_time = 1;
     uint32 start_tick_number = 2;
-    repeated Inputs inputs = 3;
+    repeated Inputs inputList = 3;
 }
 
 message StateMessage
@@ -141,6 +141,6 @@ message StateMessage
     vector3Net angular_velocity = 7;
 }
 
-message C_Action_State {
+message S_ActionState {
     repeated StateMessage states = 1;
 }

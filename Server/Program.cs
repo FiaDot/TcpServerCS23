@@ -17,40 +17,40 @@ class Program
 
     static void GameLogicTask()
     {
-	    while (true)
-	    {
-		    GameLogic.Instance.Update();
-		    Thread.Sleep(0);
-	    }
+        while (true)
+        {
+            GameLogic.Instance.Update();
+            Thread.Sleep(0);
+        }
     }
 
-            
+
     // send thread
     static void NetworkTask()
     {
-	    while (true)
-	    {
-		    List<ClientSession> sessions = SessionManager.Instance.GetSessions();
-		    foreach (ClientSession session in sessions)
-		    {
-			    session.FlushSend();
-		    }
+        while (true)
+        {
+            List<ClientSession> sessions = SessionManager.Instance.GetSessions();
+            foreach (ClientSession session in sessions)
+            {
+                session.FlushSend();
+            }
 
-		    Thread.Sleep(0);
-	    }
+            Thread.Sleep(0);
+        }
     }
-            
+
     private static List<System.Timers.Timer> _timers = new List<Timer>();
     static void TickRoom(GameRoom room, int tick = 100)
     {
         var timer = new System.Timers.Timer();
         timer.Interval = tick;
-        timer.Elapsed += ((o, e ) => { room.Update(); });
+        timer.Elapsed += ((o, e) => { room.Update(); });
         timer.AutoReset = true;
         timer.Enabled = true;
         _timers.Add(timer);
     }
-    
+
     static void Main(string[] args)
     {
         // PacketManager.Instance.Register();
@@ -74,33 +74,33 @@ class Program
         //
         //
         // Console.WriteLine($"time={decode.Time}");
-        
-        
-        
-        
+
+
+
+
         GameRoom room = RoomManager.Instance.Add(1);
         TickRoom(room, 50);
-        
+
         Console.WriteLine("Starting Server...");
-        
+
         int port = 7777;
         IPEndPoint endPoint = new IPEndPoint(NetworkInterfaceHelper.GetPublicIp(), port);
-        
-        
+
+
         // 생성과 동시에 세션 메니져 추가
         // _listener.Init(endPoint, () => { return new ClientSession(); });
-        
+
         _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
-        
+
         Console.WriteLine($"Listening... BIND {endPoint.ToString()}");
 
         // NetworkTask
         {
-	        Thread t = new Thread(NetworkTask);
-	        t.Name = "Network Send";
-	        t.Start();
+            Thread t = new Thread(NetworkTask);
+            t.Name = "Network Send";
+            t.Start();
         }
-			
+
         // JobTimer.Instance.Push(FlushRoom);
         // JobTimer.Instance.Push(() => Console.WriteLine("250"), 250);
         // JobTimer.Instance.Push(() => Console.WriteLine("500"), 500);
@@ -111,10 +111,14 @@ class Program
         //     // room.Push(room.Flush);
         //     Thread.Sleep(100);
         // }      
-        
+
         // GameLogic
         Thread.CurrentThread.Name = "GameLogic";
         GameLogicTask();
+
+        // TODO : console command line interface 
+        // TODO : adjustment server tick
+
     }
 }
 

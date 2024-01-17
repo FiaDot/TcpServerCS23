@@ -14,7 +14,7 @@ public class PacketHandler
 
 		Console.WriteLine($"> C_ChatHandler {recvPacket.Context}");
 	}
-	
+
 	// public static void C_MoveHandler(PacketSession session, IMessage packet)
 	// {
 	// 	C_Move recvPacket = packet as C_Move;
@@ -39,12 +39,12 @@ public class PacketHandler
 	//
 	// 	clientSession.MyPlayer.Room.Broadcast(move);
 	// }
-	
+
 	public static void C_MoveHandler(PacketSession session, IMessage packet)
 	{
 		C_Move movePacket = packet as C_Move;
 		ClientSession clientSession = session as ClientSession;
-		
+
 		Console.WriteLine($"> C_Move {clientSession.SessionId}=({movePacket.NetMoveInfo.Pos.X},{movePacket.NetMoveInfo.Pos.X},{movePacket.NetMoveInfo.Pos.Z})");
 
 		Player player = clientSession.MyPlayer;
@@ -79,12 +79,12 @@ public class PacketHandler
 	public static void C_PongHandler(PacketSession session, IMessage packet)
 	{
 		Console.WriteLine($"> C_Pong");
-		
+
 		C_Pong recv = packet as C_Pong;
 		ClientSession clientSession = session as ClientSession;
 		clientSession.HandlePong(recv);
 	}
-	
+
 	public static void C_RttHandler(PacketSession session, IMessage packet)
 	{
 		C_Rtt recv = packet as C_Rtt;
@@ -92,10 +92,27 @@ public class PacketHandler
 
 		S_Rtt sendPkt = new S_Rtt();
 		sendPkt.Time = recv.Time;
-		
+
 		ClientSession clientSession = session as ClientSession;
 		clientSession.Send(sendPkt);
 	}
+
+	public static void C_ActionInputHandler(PacketSession session, IMessage packet)
+	{
+		C_ActionInput recv = packet as C_ActionInput;
+		// Console.WriteLine($"> C_ActionInput : {recv.Time}");
+
+		// S_Rtt sendPkt = new S_Rtt();
+		// sendPkt.Time = recv.Time;
+
+		ClientSession clientSession = session as ClientSession;
+
+		// 입력에 따른 물리 처리
+		clientSession.SimulateInputs(recv);
+
+		// TODO : 사람들에게 이동 정보 알림 (room timer에서 하는게 맞을듯...)	
+	}
+
 }
 
 

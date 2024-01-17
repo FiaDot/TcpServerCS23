@@ -48,22 +48,22 @@ namespace Google.Protobuf.Protocol {
             "bmcSDAoEdGltZRgBIAEoBSIVCgVDX1J0dBIMCgR0aW1lGAEgASgCIhUKBVNf",
             "UnR0EgwKBHRpbWUYASABKAIiXAoGSW5wdXRzEgoKAnVwGAEgASgIEgwKBGRv",
             "d24YAiABKAgSDAoEbGVmdBgDIAEoCBINCgVyaWdodBgEIAEoCBIMCgRqdW1w",
-            "GAUgASgIEg0KBXNob290GAYgASgIImQKDkNfQWN0aW9uX0lucHV0EhUKDWRl",
-            "bGl2ZXJ5X3RpbWUYASABKAISGQoRc3RhcnRfdGlja19udW1iZXIYAiABKA0S",
-            "IAoGaW5wdXRzGAMgAygLMhAuUHJvdG9jb2wuSW5wdXRzIuIBCgxTdGF0ZU1l",
-            "c3NhZ2USFQoNZGVsaXZlcnlfdGltZRgBIAEoAhITCgt0aWNrX251bWJlchgC",
-            "IAEoDRImCghwb3NpdGlvbhgDIAEoCzIULlByb3RvY29sLnZlY3RvcjNOZXQS",
-            "JgoIcm90YXRpb24YBCABKAsyFC5Qcm90b2NvbC52ZWN0b3IzTmV0EiYKCHZl",
-            "bG9jaXR5GAUgASgLMhQuUHJvdG9jb2wudmVjdG9yM05ldBIuChBhbmd1bGFy",
-            "X3ZlbG9jaXR5GAcgASgLMhQuUHJvdG9jb2wudmVjdG9yM05ldCI4Cg5DX0Fj",
-            "dGlvbl9TdGF0ZRImCgZzdGF0ZXMYASADKAsyFi5Qcm90b2NvbC5TdGF0ZU1l",
-            "c3NhZ2Uq8wEKBU1zZ0lkEgoKBlBFUlNPThAAEgoKBkNfQ0hBVBABEgoKBlNf",
-            "Q0hBVBACEhAKDFNfRU5URVJfR0FNRRADEhAKDFNfTEVBVkVfR0FNRRAEEgsK",
-            "B1NfU1BBV04QBRINCglTX0RFU1BBV04QBhIKCgZDX01PVkUQBxIKCgZTX01P",
-            "VkUQCBILCgdDX1NLSUxMEAkSCwoHU19TS0lMTBAKEgoKBlNfUElORxALEgoK",
-            "BkNfUE9ORxAMEgkKBUNfUlRUEA0SCQoFU19SVFQQDhISCg5DX0FDVElPTl9J",
-            "TlBVVBAPEhIKDkNfQUNUSU9OX1NUQVRFEBBCG6oCGEdvb2dsZS5Qcm90b2J1",
-            "Zi5Qcm90b2NvbGIGcHJvdG8z"));
+            "GAUgASgIEg0KBXNob290GAYgASgIImYKDUNfQWN0aW9uSW5wdXQSFQoNZGVs",
+            "aXZlcnlfdGltZRgBIAEoAhIZChFzdGFydF90aWNrX251bWJlchgCIAEoDRIj",
+            "CglpbnB1dExpc3QYAyADKAsyEC5Qcm90b2NvbC5JbnB1dHMi4gEKDFN0YXRl",
+            "TWVzc2FnZRIVCg1kZWxpdmVyeV90aW1lGAEgASgCEhMKC3RpY2tfbnVtYmVy",
+            "GAIgASgNEiYKCHBvc2l0aW9uGAMgASgLMhQuUHJvdG9jb2wudmVjdG9yM05l",
+            "dBImCghyb3RhdGlvbhgEIAEoCzIULlByb3RvY29sLnZlY3RvcjNOZXQSJgoI",
+            "dmVsb2NpdHkYBSABKAsyFC5Qcm90b2NvbC52ZWN0b3IzTmV0Ei4KEGFuZ3Vs",
+            "YXJfdmVsb2NpdHkYByABKAsyFC5Qcm90b2NvbC52ZWN0b3IzTmV0IjcKDVNf",
+            "QWN0aW9uU3RhdGUSJgoGc3RhdGVzGAEgAygLMhYuUHJvdG9jb2wuU3RhdGVN",
+            "ZXNzYWdlKvMBCgVNc2dJZBIKCgZQRVJTT04QABIKCgZDX0NIQVQQARIKCgZT",
+            "X0NIQVQQAhIQCgxTX0VOVEVSX0dBTUUQAxIQCgxTX0xFQVZFX0dBTUUQBBIL",
+            "CgdTX1NQQVdOEAUSDQoJU19ERVNQQVdOEAYSCgoGQ19NT1ZFEAcSCgoGU19N",
+            "T1ZFEAgSCwoHQ19TS0lMTBAJEgsKB1NfU0tJTEwQChIKCgZTX1BJTkcQCxIK",
+            "CgZDX1BPTkcQDBIJCgVDX1JUVBANEgkKBVNfUlRUEA4SEgoOQ19BQ1RJT05f",
+            "SU5QVVQQDxISCg5TX0FDVElPTl9TVEFURRAQQhuqAhhHb29nbGUuUHJvdG9i",
+            "dWYuUHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -86,9 +86,9 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Rtt), global::Google.Protobuf.Protocol.C_Rtt.Parser, new[]{ "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Rtt), global::Google.Protobuf.Protocol.S_Rtt.Parser, new[]{ "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.Inputs), global::Google.Protobuf.Protocol.Inputs.Parser, new[]{ "Up", "Down", "Left", "Right", "Jump", "Shoot" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Action_Input), global::Google.Protobuf.Protocol.C_Action_Input.Parser, new[]{ "DeliveryTime", "StartTickNumber", "Inputs" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_ActionInput), global::Google.Protobuf.Protocol.C_ActionInput.Parser, new[]{ "DeliveryTime", "StartTickNumber", "InputList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.StateMessage), global::Google.Protobuf.Protocol.StateMessage.Parser, new[]{ "DeliveryTime", "TickNumber", "Position", "Rotation", "Velocity", "AngularVelocity" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Action_State), global::Google.Protobuf.Protocol.C_Action_State.Parser, new[]{ "States" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ActionState), global::Google.Protobuf.Protocol.S_ActionState.Parser, new[]{ "States" }, null, null, null, null)
           }));
     }
     #endregion
@@ -125,7 +125,10 @@ namespace Google.Protobuf.Protocol {
     /// 키보드 입력
     /// </summary>
     [pbr::OriginalName("C_ACTION_INPUT")] CActionInput = 15,
-    [pbr::OriginalName("C_ACTION_STATE")] CActionState = 16,
+    /// <summary>
+    /// 서버에서 물리 처리 후 응답
+    /// </summary>
+    [pbr::OriginalName("S_ACTION_STATE")] SActionState = 16,
   }
 
   #endregion
@@ -3149,11 +3152,11 @@ namespace Google.Protobuf.Protocol {
 
   }
 
-  public sealed partial class C_Action_Input : pb::IMessage<C_Action_Input> {
-    private static readonly pb::MessageParser<C_Action_Input> _parser = new pb::MessageParser<C_Action_Input>(() => new C_Action_Input());
+  public sealed partial class C_ActionInput : pb::IMessage<C_ActionInput> {
+    private static readonly pb::MessageParser<C_ActionInput> _parser = new pb::MessageParser<C_ActionInput>(() => new C_ActionInput());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<C_Action_Input> Parser { get { return _parser; } }
+    public static pb::MessageParser<C_ActionInput> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -3166,23 +3169,23 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Action_Input() {
+    public C_ActionInput() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Action_Input(C_Action_Input other) : this() {
+    public C_ActionInput(C_ActionInput other) : this() {
       deliveryTime_ = other.deliveryTime_;
       startTickNumber_ = other.startTickNumber_;
-      inputs_ = other.inputs_.Clone();
+      inputList_ = other.inputList_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Action_Input Clone() {
-      return new C_Action_Input(this);
+    public C_ActionInput Clone() {
+      return new C_ActionInput(this);
     }
 
     /// <summary>Field number for the "delivery_time" field.</summary>
@@ -3207,23 +3210,23 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "inputs" field.</summary>
-    public const int InputsFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.Inputs> _repeated_inputs_codec
+    /// <summary>Field number for the "inputList" field.</summary>
+    public const int InputListFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.Inputs> _repeated_inputList_codec
         = pb::FieldCodec.ForMessage(26, global::Google.Protobuf.Protocol.Inputs.Parser);
-    private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.Inputs> inputs_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.Inputs>();
+    private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.Inputs> inputList_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.Inputs>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Google.Protobuf.Protocol.Inputs> Inputs {
-      get { return inputs_; }
+    public pbc::RepeatedField<global::Google.Protobuf.Protocol.Inputs> InputList {
+      get { return inputList_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as C_Action_Input);
+      return Equals(other as C_ActionInput);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(C_Action_Input other) {
+    public bool Equals(C_ActionInput other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -3232,7 +3235,7 @@ namespace Google.Protobuf.Protocol {
       }
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(DeliveryTime, other.DeliveryTime)) return false;
       if (StartTickNumber != other.StartTickNumber) return false;
-      if(!inputs_.Equals(other.inputs_)) return false;
+      if(!inputList_.Equals(other.inputList_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3241,7 +3244,7 @@ namespace Google.Protobuf.Protocol {
       int hash = 1;
       if (DeliveryTime != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(DeliveryTime);
       if (StartTickNumber != 0) hash ^= StartTickNumber.GetHashCode();
-      hash ^= inputs_.GetHashCode();
+      hash ^= inputList_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3263,7 +3266,7 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(16);
         output.WriteUInt32(StartTickNumber);
       }
-      inputs_.WriteTo(output, _repeated_inputs_codec);
+      inputList_.WriteTo(output, _repeated_inputList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3278,7 +3281,7 @@ namespace Google.Protobuf.Protocol {
       if (StartTickNumber != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(StartTickNumber);
       }
-      size += inputs_.CalculateSize(_repeated_inputs_codec);
+      size += inputList_.CalculateSize(_repeated_inputList_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -3286,7 +3289,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(C_Action_Input other) {
+    public void MergeFrom(C_ActionInput other) {
       if (other == null) {
         return;
       }
@@ -3296,7 +3299,7 @@ namespace Google.Protobuf.Protocol {
       if (other.StartTickNumber != 0) {
         StartTickNumber = other.StartTickNumber;
       }
-      inputs_.Add(other.inputs_);
+      inputList_.Add(other.inputList_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -3317,7 +3320,7 @@ namespace Google.Protobuf.Protocol {
             break;
           }
           case 26: {
-            inputs_.AddEntriesFrom(input, _repeated_inputs_codec);
+            inputList_.AddEntriesFrom(input, _repeated_inputList_codec);
             break;
           }
         }
@@ -3619,11 +3622,11 @@ namespace Google.Protobuf.Protocol {
 
   }
 
-  public sealed partial class C_Action_State : pb::IMessage<C_Action_State> {
-    private static readonly pb::MessageParser<C_Action_State> _parser = new pb::MessageParser<C_Action_State>(() => new C_Action_State());
+  public sealed partial class S_ActionState : pb::IMessage<S_ActionState> {
+    private static readonly pb::MessageParser<S_ActionState> _parser = new pb::MessageParser<S_ActionState>(() => new S_ActionState());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<C_Action_State> Parser { get { return _parser; } }
+    public static pb::MessageParser<S_ActionState> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -3636,21 +3639,21 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Action_State() {
+    public S_ActionState() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Action_State(C_Action_State other) : this() {
+    public S_ActionState(S_ActionState other) : this() {
       states_ = other.states_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Action_State Clone() {
-      return new C_Action_State(this);
+    public S_ActionState Clone() {
+      return new S_ActionState(this);
     }
 
     /// <summary>Field number for the "states" field.</summary>
@@ -3665,11 +3668,11 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as C_Action_State);
+      return Equals(other as S_ActionState);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(C_Action_State other) {
+    public bool Equals(S_ActionState other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -3714,7 +3717,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(C_Action_State other) {
+    public void MergeFrom(S_ActionState other) {
       if (other == null) {
         return;
       }
