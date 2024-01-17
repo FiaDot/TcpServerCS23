@@ -22,6 +22,8 @@ enum MsgId {
   C_PONG = 12;
   C_RTT = 13;
   S_RTT = 14;
+  C_ACTION_INPUT = 15; // 키보드 입력
+  C_ACTION_STATE = 16;
 }
 
 message C_Chat {
@@ -107,4 +109,38 @@ message C_Rtt {
 
 message S_Rtt {
     float time = 1;
+}
+
+
+// 유저 입력
+message Inputs {
+    // 방향키
+    bool up = 1;
+    bool down = 2;
+    bool left = 3;
+    bool right = 4;
+        
+    bool jump = 5;    
+    bool shoot = 6;
+    // bool dash = 7;
+}
+
+message C_Action_Input {
+    float delivery_time = 1;
+    uint32 start_tick_number = 2;
+    repeated Inputs inputs = 3;
+}
+
+message StateMessage
+{
+    float delivery_time = 1;
+    uint32 tick_number = 2;
+    vector3Net position = 3;
+    vector3Net rotation = 4;
+    vector3Net velocity = 5;
+    vector3Net angular_velocity = 7;
+}
+
+message C_Action_State {
+    repeated StateMessage states = 1;
 }
