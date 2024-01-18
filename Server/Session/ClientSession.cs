@@ -6,6 +6,7 @@ using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server.Game;
 using Google.Protobuf.Collections;
+using System.Numerics;
 
 namespace Server
 {
@@ -50,6 +51,7 @@ namespace Server
         uint server_tick_number = 0;
         uint server_tick_accumulator = 0;
         uint server_snapshot_rate = 10;
+        float moveSpeed = 5f / (float)server_snapshot_rate;
 
         // location, rotation만 사용
         StateMessage rigidbody = new StateMessage();
@@ -93,7 +95,7 @@ namespace Server
                     StateMessage state_msg = new StateMessage();
                     // state_msg.DeliveryTime = Time.time + this.latency;
                     state_msg.TickNumber = server_tick_number;
-                    // state_msg.Position = server_rigidbody.position;
+                    state_msg.Position = rigidbody.Position;
                     // state_msg.Rotation = server_rigidbody.rotation;
                     // state_msg.Velocity = server_rigidbody.velocity;
                     // state_msg.AngularVelocity = server_rigidbody.angularVelocity;
@@ -105,22 +107,26 @@ namespace Server
 
         void SimulateStep(Inputs inputs)
         {
-            // if (inputs.Up)
-            // {
-            //     rigidbody.AddForce(this.local_player_camera_transform.forward * this.player_movement_impulse, ForceMode.Impulse);
-            // }
-            // if (inputs.Down)
-            // {
-            //     rigidbody.AddForce(-this.local_player_camera_transform.forward * this.player_movement_impulse, ForceMode.Impulse);
-            // }
-            // if (inputs.Left)
-            // {
-            //     rigidbody.AddForce(-this.local_player_camera_transform.right * this.player_movement_impulse, ForceMode.Impulse);
-            // }
-            // if (inputs.Right)
-            // {
-            //     rigidbody.AddForce(this.local_player_camera_transform.right * this.player_movement_impulse, ForceMode.Impulse);
-            // }
+            if (inputs.Up)
+            {
+                rigidbody.Position.Z += 1 * moveSpeed;
+                //     rigidbody.AddForce(this.local_player_camera_transform.forward * this.player_movement_impulse, ForceMode.Impulse);
+            }
+            if (inputs.Down)
+            {
+                rigidbody.Position.Z -= 1 * moveSpeed;
+                //     rigidbody.AddForce(-this.local_player_camera_transform.forward * this.player_movement_impulse, ForceMode.Impulse);
+            }
+            if (inputs.Left)
+            {
+                rigidbody.Position.X -= 1 * moveSpeed;
+                //     rigidbody.AddForce(-this.local_player_camera_transform.right * this.player_movement_impulse, ForceMode.Impulse);
+            }
+            if (inputs.Right)
+            {
+                rigidbody.Position.Y -= 1 * moveSpeed;
+                //     rigidbody.AddForce(this.local_player_camera_transform.right * this.player_movement_impulse, ForceMode.Impulse);
+            }
 
             // if (rigidbody.transform.position.y <= this.player_jump_y_threshold && inputs.jump)
             // {

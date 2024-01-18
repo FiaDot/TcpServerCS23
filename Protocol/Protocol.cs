@@ -55,15 +55,15 @@ namespace Google.Protobuf.Protocol {
             "GAIgASgNEiYKCHBvc2l0aW9uGAMgASgLMhQuUHJvdG9jb2wudmVjdG9yM05l",
             "dBImCghyb3RhdGlvbhgEIAEoCzIULlByb3RvY29sLnZlY3RvcjNOZXQSJgoI",
             "dmVsb2NpdHkYBSABKAsyFC5Qcm90b2NvbC52ZWN0b3IzTmV0Ei4KEGFuZ3Vs",
-            "YXJfdmVsb2NpdHkYByABKAsyFC5Qcm90b2NvbC52ZWN0b3IzTmV0IjcKDVNf",
-            "QWN0aW9uU3RhdGUSJgoGc3RhdGVzGAEgAygLMhYuUHJvdG9jb2wuU3RhdGVN",
-            "ZXNzYWdlKvMBCgVNc2dJZBIKCgZQRVJTT04QABIKCgZDX0NIQVQQARIKCgZT",
-            "X0NIQVQQAhIQCgxTX0VOVEVSX0dBTUUQAxIQCgxTX0xFQVZFX0dBTUUQBBIL",
-            "CgdTX1NQQVdOEAUSDQoJU19ERVNQQVdOEAYSCgoGQ19NT1ZFEAcSCgoGU19N",
-            "T1ZFEAgSCwoHQ19TS0lMTBAJEgsKB1NfU0tJTEwQChIKCgZTX1BJTkcQCxIK",
-            "CgZDX1BPTkcQDBIJCgVDX1JUVBANEgkKBVNfUlRUEA4SEgoOQ19BQ1RJT05f",
-            "SU5QVVQQDxISCg5TX0FDVElPTl9TVEFURRAQQhuqAhhHb29nbGUuUHJvdG9i",
-            "dWYuUHJvdG9jb2xiBnByb3RvMw=="));
+            "YXJfdmVsb2NpdHkYByABKAsyFC5Qcm90b2NvbC52ZWN0b3IzTmV0IkkKDVNf",
+            "QWN0aW9uU3RhdGUSEAoIcGxheWVySWQYASABKAUSJgoGc3RhdGVzGAIgAygL",
+            "MhYuUHJvdG9jb2wuU3RhdGVNZXNzYWdlKvMBCgVNc2dJZBIKCgZQRVJTT04Q",
+            "ABIKCgZDX0NIQVQQARIKCgZTX0NIQVQQAhIQCgxTX0VOVEVSX0dBTUUQAxIQ",
+            "CgxTX0xFQVZFX0dBTUUQBBILCgdTX1NQQVdOEAUSDQoJU19ERVNQQVdOEAYS",
+            "CgoGQ19NT1ZFEAcSCgoGU19NT1ZFEAgSCwoHQ19TS0lMTBAJEgsKB1NfU0tJ",
+            "TEwQChIKCgZTX1BJTkcQCxIKCgZDX1BPTkcQDBIJCgVDX1JUVBANEgkKBVNf",
+            "UlRUEA4SEgoOQ19BQ1RJT05fSU5QVVQQDxISCg5TX0FDVElPTl9TVEFURRAQ",
+            "QhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -88,7 +88,7 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.Inputs), global::Google.Protobuf.Protocol.Inputs.Parser, new[]{ "Up", "Down", "Left", "Right", "Jump", "Shoot" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_ActionInput), global::Google.Protobuf.Protocol.C_ActionInput.Parser, new[]{ "DeliveryTime", "StartTickNumber", "InputList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.StateMessage), global::Google.Protobuf.Protocol.StateMessage.Parser, new[]{ "DeliveryTime", "TickNumber", "Position", "Rotation", "Velocity", "AngularVelocity" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ActionState), global::Google.Protobuf.Protocol.S_ActionState.Parser, new[]{ "States" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ActionState), global::Google.Protobuf.Protocol.S_ActionState.Parser, new[]{ "PlayerId", "States" }, null, null, null, null)
           }));
     }
     #endregion
@@ -3647,6 +3647,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public S_ActionState(S_ActionState other) : this() {
+      playerId_ = other.playerId_;
       states_ = other.states_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -3656,10 +3657,21 @@ namespace Google.Protobuf.Protocol {
       return new S_ActionState(this);
     }
 
+    /// <summary>Field number for the "playerId" field.</summary>
+    public const int PlayerIdFieldNumber = 1;
+    private int playerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int PlayerId {
+      get { return playerId_; }
+      set {
+        playerId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "states" field.</summary>
-    public const int StatesFieldNumber = 1;
+    public const int StatesFieldNumber = 2;
     private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.StateMessage> _repeated_states_codec
-        = pb::FieldCodec.ForMessage(10, global::Google.Protobuf.Protocol.StateMessage.Parser);
+        = pb::FieldCodec.ForMessage(18, global::Google.Protobuf.Protocol.StateMessage.Parser);
     private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.StateMessage> states_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.StateMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::Google.Protobuf.Protocol.StateMessage> States {
@@ -3679,6 +3691,7 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (PlayerId != other.PlayerId) return false;
       if(!states_.Equals(other.states_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -3686,6 +3699,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
       hash ^= states_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -3700,6 +3714,10 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
+      if (PlayerId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(PlayerId);
+      }
       states_.WriteTo(output, _repeated_states_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3709,6 +3727,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (PlayerId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
+      }
       size += states_.CalculateSize(_repeated_states_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3720,6 +3741,9 @@ namespace Google.Protobuf.Protocol {
     public void MergeFrom(S_ActionState other) {
       if (other == null) {
         return;
+      }
+      if (other.PlayerId != 0) {
+        PlayerId = other.PlayerId;
       }
       states_.Add(other.states_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -3733,7 +3757,11 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
+          case 8: {
+            PlayerId = input.ReadInt32();
+            break;
+          }
+          case 18: {
             states_.AddEntriesFrom(input, _repeated_states_codec);
             break;
           }

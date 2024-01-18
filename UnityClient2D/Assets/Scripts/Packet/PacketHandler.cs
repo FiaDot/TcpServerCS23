@@ -126,4 +126,26 @@ class PacketHandler
 
 		// Managers.Object.MyPlayer.RTT = rtt;
 	}
+
+	public static void S_ActionStateHandler(PacketSession session, IMessage packet)
+	{
+		S_ActionState recv = packet as S_ActionState;
+
+		Debug.Log($"> S_ActionState : Player={recv.playerId}");
+
+		GameObject go = Managers.Object.FindById(recvPacket.PlayerId);
+		if (null == go)
+			return;
+
+		NetCharacter cc = go.GetComponent<NetCharacter>();
+		if (null == cc)
+			return;
+
+		foreach (StateMessage state in recv.states)
+		{
+			// TODO : something..
+			cc.OnNetworkStateMsg(state);
+		}
+	}
+
 }

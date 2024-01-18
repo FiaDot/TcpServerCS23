@@ -9,14 +9,25 @@ public class NetCharacter : MonoBehaviour
 
 	[SerializeField]
 	public float _speed = 5.0f;
-	
+
 	public bool IsMine { get; set; }
 
 	private Vector3 inputDir;
-	
+
 	// cache
 	private NetMove _netMoveInfo = new NetMove();
-	
+
+	// 클라이언트
+	float client_timer;
+	uint client_tick_number;
+	uint client_last_received_state_tick;
+	const int CLIENT_BUFFER_SIZE = 1024; // 버퍼 크기
+
+	ClientState[] client_state_buffer;
+	Inputs[] client_input_buffer;
+	Queue<StateMessage> client_state_msgs;
+
+
 	Vector3 ToVector3(vector3Net netValue)
 	{
 		return new Vector3(netValue.X, netValue.Y, netValue.Z);
@@ -24,44 +35,50 @@ public class NetCharacter : MonoBehaviour
 
 	vector3Net ToVector3Net(Vector3 v)
 	{
-		vector3Net net = new vector3Net();
+		vector3Net net = new vector3Net(); //{ X = v.x, Y};
 		net.X = v.x;
 		net.Y = v.y;
 		net.Z = v.z;
 		return net;
 	}
-	
-	
+
+
 	// 서버 접속 후 초기 위치 지정
 	public void InitPos(NetMove netMoveInfo)
 	{
 		transform.position = ToVector3(netMoveInfo.Pos);
 	}
-	
+
 	void Start()
-    {
-        
-    }
+	{
+		// 클라이언트 초기화
+		client_timer = 0.0f;
+		client_tick_number = 0;
+		client_last_received_state_tick = 0;
+		client_state_buffer = new ClientState[CLIENT_BUFFER_SIZE];
+		client_input_buffer = new Inputs[CLIENT_BUFFER_SIZE];
+		client_state_msgs = new Queue<StateMessage>();
+	}
 
- 
-    void Update()
-    {
-	    if (IsMine)
-	    {
-		    InputMovement();
-		    SendMove();
-		    return;
-	    }
 
-	    Interpolation();
-    }
+	void Update()
+	{
+		if (IsMine)
+		{
+			InputMovement();
+			SendMove();
+			return;
+		}
 
-    void InputMovement()
-    {
-	    Vector3 destPos = Vector3.zero;
-	    Vector3 dir = Vector3.zero;
-	    
-	    if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+		Interpolation();
+	}
+
+	void InputMovement()
+	{
+		Vector3 destPos = Vector3.zero;
+		Vector3 dir = Vector3.zero;
+
+		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
 		{
 			dir = Vector3.up;
 		}
@@ -74,84 +91,105 @@ public class NetCharacter : MonoBehaviour
 			dir = Vector3.left;
 		}
 		else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-	    {
-		    dir = Vector3.right;
+		{
+			dir = Vector3.right;
 		}
-	    
-	    if ( dir != Vector3.zero )
-	    {
+
+		if (dir != Vector3.zero)
+		{
 			destPos = dir * (_speed * Time.deltaTime);
 			PosDir = destPos;
 			// PosDir = dir; // 이러면 안맞음 ㅋㅋㅋ
-			
+
 			// Debug.Log(destPos);
 			transform.position += destPos;
-	    }
-	    // else
-	    // {
-		   //  PosDir = Vector3.zero;
-	    // }
-    }
+		}
+		// else
+		// {
+		//  PosDir = Vector3.zero;
+		// }
+	}
 
-    // [SerializeField]
-    private float MOVING_INTERVAL_TIME = 0.3f;
-    private float sendPeriod = 0f; // 이동 패킷 전송 주기.
-    
-    void SendMove()
-    {
-	    sendPeriod += Time.unscaledDeltaTime;
-	    if (MOVING_INTERVAL_TIME > sendPeriod)
-		    return;
-	    sendPeriod = 0f;
+	// [SerializeField]
+	private float MOVING_INTERVAL_TIME = 0.3f;
+	private float sendPeriod = 0f; // 이동 패킷 전송 주기.
+
+	void SendMove()
+	{
+		sendPeriod += Time.unscaledDeltaTime;
+		if (MOVING_INTERVAL_TIME > sendPeriod)
+			return;
+		sendPeriod = 0f;
 
 		C_Move movePacket = new C_Move();
 		_netMoveInfo.Pos = ToVector3Net(transform.position);
 		_netMoveInfo.Dir = ToVector3Net(PosDir);
 		movePacket.NetMoveInfo = _netMoveInfo;
 		Managers.Network.Send(movePacket);
-    }
-    
-    public void OnNetworkMove(NetMove netMoveInfo)
-    {
-	    if (IsMine)
-		    return;
+	}
 
-	    // Debug.Log(transform.position);
-	    // transform.position = ToVector3(netMoveInfo.Pos);
-	    
-	    syncTimeElapsed = 0f;
-	    syncDuration = Time.time - lastSynchronizationTime;
-        lastSynchronizationTime = Time.time;
-        // Debug.Log(syncDuration); // sendPeriod + a 가 됨
+	public void OnNetworkMove(NetMove netMoveInfo)
+	{
+		if (IsMine)
+			return;
 
-	    srcPos = transform.position;
-	    dstPos = ToVector3(netMoveInfo.Pos) + ToVector3(netMoveInfo.Dir) * syncDuration;
-	    // dstPos = ToVector3(netMoveInfo.Pos);
-    }
+		// Debug.Log(transform.position);
+		// transform.position = ToVector3(netMoveInfo.Pos);
 
-    private float syncTimeElapsed = 0f; // lerp 진행 시간
-    private float syncDuration = 0f; // 동기화 주기
-    
-    private Vector3 srcPos = Vector3.zero; // 이동 정보 받은 시점의 위치
+		syncTimeElapsed = 0f;
+		syncDuration = Time.time - lastSynchronizationTime;
+		lastSynchronizationTime = Time.time;
+		// Debug.Log(syncDuration); // sendPeriod + a 가 됨
+
+		srcPos = transform.position;
+		dstPos = ToVector3(netMoveInfo.Pos) + ToVector3(netMoveInfo.Dir) * syncDuration;
+		// dstPos = ToVector3(netMoveInfo.Pos);
+	}
+
+	private float syncTimeElapsed = 0f; // lerp 진행 시간
+	private float syncDuration = 0f; // 동기화 주기
+
+	private Vector3 srcPos = Vector3.zero; // 이동 정보 받은 시점의 위치
 	private Vector3 dstPos = Vector3.zero; // 이동 정보 받았을 때 가야하는 위치 
 
 	private Vector3 PosDir = Vector3.zero;
-	
-	
-	private float lastSynchronizationTime = 0f; 
-	
-    void Interpolation()
-    {
-	    // 이렇게 해야 이징 처리 안되고 linear 하게 처리됨
-	    if (syncTimeElapsed < syncDuration)
-	    {
+
+
+	private float lastSynchronizationTime = 0f;
+
+	void Interpolation()
+	{
+		// 이렇게 해야 이징 처리 안되고 linear 하게 처리됨
+		if (syncTimeElapsed < syncDuration)
+		{
 			syncTimeElapsed += Time.deltaTime;
 			transform.position = Vector3.Lerp(srcPos, dstPos, syncTimeElapsed / syncDuration);
-	    }
-	    else
-	    {
-		    transform.position = dstPos;
-	    }
-    }
-    
+		}
+		else
+		{
+			transform.position = dstPos;
+		}
+	}
+
+
+	public void OnNetworkStateMsg(StateMessage state_msg)
+	{
+		if (IsMine)
+			return;
+
+		Debug.Log($"StateMessage : Tick={state_msg.TickNumber}");
+		// Debug.Log(transform.position);
+		// transform.position = ToVector3(netMoveInfo.Pos);
+
+		// syncTimeElapsed = 0f;
+		// syncDuration = Time.time - lastSynchronizationTime;
+		// lastSynchronizationTime = Time.time;
+		// // Debug.Log(syncDuration); // sendPeriod + a 가 됨
+
+		// srcPos = transform.position;
+		// dstPos = ToVector3(netMoveInfo.Pos) + ToVector3(netMoveInfo.Dir) * syncDuration;
+		// dstPos = ToVector3(netMoveInfo.Pos);
+	}
+
+
 }

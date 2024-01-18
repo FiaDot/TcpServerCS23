@@ -142,5 +142,6 @@ message StateMessage
 }
 
 message S_ActionState {
-    repeated StateMessage states = 1;
+    int32 playerId = 1;
+    repeated StateMessage states = 2;
 }
