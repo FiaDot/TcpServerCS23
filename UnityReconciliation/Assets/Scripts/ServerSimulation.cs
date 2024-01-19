@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ServerSimulation : MonoBehaviour
 {
+    [SerializeField]
     CharController characterController;
-    Queue<ClientInputState> clientInputs;
+    Queue<ClientInputState> clientInputs = new Queue<ClientInputState>();
 
     void Start()
     {
@@ -33,6 +34,6 @@ public class ServerSimulation : MonoBehaviour
         // TODO : clientId 구분은 일단 패스
 
         // TODO : lock
-        clientInputs.Add(message);
+        clientInputs.Enqueue(message);
     }
 }

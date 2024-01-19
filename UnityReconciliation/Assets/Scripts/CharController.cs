@@ -45,13 +45,16 @@ public class CharController : MonoBehaviour
         inputState = new ClientInputState
         {
             left = Input.GetKey(KeyCode.A),
-            right = Input.GetKey(KeyCode.A)
+            right = Input.GetKey(KeyCode.D)
         };
     }
 
     void FixedUpdate()
     {
         // TODO : 서버는 skip
+
+        if (null == inputState)
+            return;
 
         // 물리 tick 단위로 업데이트        
         inputState.simulationFrame = simulationFrame;
@@ -79,7 +82,7 @@ public class CharController : MonoBehaviour
     }
 
     // Common
-    void ProcessInputs(ClientInputState state)
+    public void ProcessInputs(ClientInputState state)
     {
         if (state == null)
             state = defaultInputState;
@@ -92,11 +95,11 @@ public class CharController : MonoBehaviour
         // 왼쪽이면 -1, 오른쪽이면 1, 아니면 0
         vertical = moveRight ? 1 : moveLeft ? -1 : 0;
 
-        transform.Translate(new Vector3(0f, 0f, vertical));
+        transform.Translate(new Vector3(vertical * 0.1f, 0f, 0f));
     }
 
     // Common
-    SimulationState CurrentSimulationState(ClientInputState inputState)
+    public SimulationState CurrentSimulationState(ClientInputState inputState)
     {
         return new SimulationState
         {
