@@ -1,0 +1,46 @@
+# =============== #
+# Unity generated #
+# =============== #
+[Tt]emp/
+[Oo]bj/
+[Bb]uild
+[Ll]ibrary/
+sysinfo.txt
+[Ll]ogs/
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+[Ee]xported[Oo]bj/
+/*.userprefs
+/*.csproj
+/*.pidb
+/*.suo
+/*.sln*
+/*.user
+/*.unityproj
+/*.booproj
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+# sourcetree for win - added files not recognized in filesystem
+#Icon?
+ehthumbs.db
+[Tt]humbs.db
+
+# AssetBundle
+[Aa]sset[Bb]undles/
+Assets/Google2uGen.meta
+Assets/Google2uGen/CSV.meta
+Assets/Google2uGen/CSV/Monster.meta
+linecount.txt
+Log/statistics.txt
+g2uPrefs.bin
+
+Assets/Plugins/Android/firebase-common-9.0.2.meta
+Assets/Plugins/Android/firebase-common-9.0.2/libs.meta
+Assets/Plugins/Android/firebase-common-9.0.2/res.meta
