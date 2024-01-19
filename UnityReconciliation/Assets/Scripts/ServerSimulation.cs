@@ -17,7 +17,7 @@ public class ServerSimulation : MonoBehaviour
         Queue<ClientInputState> queue = clientInputs;
         ClientInputState inputState = null;
 
-        while (queue.count > 0 && (inputState = queue.Dequeue()) != null)
+        while (queue.Count > 0 && (inputState = queue.Dequeue()) != null)
         {
             characterController.ProcessInputs(inputState);
             SimulationState state = characterController.CurrentSimulationState(inputState);

@@ -30,6 +30,8 @@ public class CharController : MonoBehaviour
     // 서버에서 받아 마지막으로 재구성된 시뮬레이션 프레임
     int lastCorrectedFrame;
 
+    [SerializeField]
+    ServerSimulation server;
 
     void Start()
     {
@@ -59,6 +61,7 @@ public class CharController : MonoBehaviour
 
         // TODO : 서버로 보내기
         // server.Send(inputState);
+        server.OnClientInputStateReceived(0, inputState);
 
         // 서버에서 받은 상태 정보가 있다면 재구성 체크 및 실행
         if (serverSimulationState != null)
