@@ -33,6 +33,9 @@ public class CharController : MonoBehaviour
     [SerializeField]
     ServerSimulation server;
 
+    [SerializeField]
+    GameObject playerServer;
+
     void Start()
     {
         // register(OnServerSimulationStateReceive);
@@ -167,6 +170,8 @@ public class CharController : MonoBehaviour
                 // Determine the cache index 
                 int rewindCacheIndex = rewindFrame % STATE_CACHE_SIZE;
 
+                Debug.Log($"RewindFrame={rewindFrame}");
+
                 // Obtain the cached input and simulation states.
                 ClientInputState rewindCachedInputState = inputStateCache[rewindCacheIndex];
                 SimulationState rewindCachedSimulationState = simulationStateCache[rewindCacheIndex];
@@ -204,7 +209,16 @@ public class CharController : MonoBehaviour
         if (serverSimulationState?.simulationFrame < message.simulationFrame)
         {
             serverSimulationState = message;
+
+            // MovePlayerServer(serverSimulationState.posX);
         }
     }
+
+    // void MovePlayerServer(float posX)
+    // {
+    //     Vector3 pos = playerServer.transform.position;
+    //     pos.x = posX;
+    //     playerServer.transform.position = pos;
+    // }
 
 }
