@@ -405,3 +405,5 @@ ASALocalRun/
 .localhistory/
 Protocol/ClientPacketManager.cs
 Protocol/ServerPacketManager.cs
+UnityReconciliation/Library
+UnityReconciliation/Temp
