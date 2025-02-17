@@ -50,7 +50,7 @@ namespace Server
 
         uint server_tick_number = 0;
         uint server_tick_accumulator = 0;
-        uint server_snapshot_rate = 10;
+        static uint server_snapshot_rate = 10;
         float moveSpeed = 5f / (float)server_snapshot_rate;
 
         // location, rotation만 사용
